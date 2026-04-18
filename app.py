@@ -369,7 +369,7 @@ elif menu == "🔢 지학 계산기":
             msg = f"\n[문제] 주경 초점거리 {obj_fl}mm, 접안렌즈 초점거리 {eye_fl}mm일 때 배율은?"
 
         elif current_problem == "분해능":
-            aperture = random.choice()
+            aperture = random.choice([1000, 1100, 1200, 1300, 1600, 3000, 2500, 2300, 1900, 2000])
             wavelength_nm = 550 
             res_val = (1.22 * (wavelength_nm * 1e-6) / aperture) * 206265
             correct_ans = round(res_val, 2)
