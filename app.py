@@ -202,7 +202,7 @@ elif menu == "🧪 화학 명명법":
             st.error(f"오답입니다. 정답은: {correct}")
             
     if col2.button("다음 문제"):
-        st.session_state.chem_q = random.choice(list(all_chem.keys()))
+        st.session_state.chem_idx += 1
         st.rerun()
 
 # 3. 망원경 구조 (망원경 구조.py)
@@ -272,7 +272,8 @@ elif menu == "🔭 망원경 구조":
             st.error(f"틀렸습니다. 정답은 [{parts[q_num]}]입니다.")
             
     if st.button("다른 번호 풀기"):
-        st.session_state.tele_num = random.choice(list(parts.keys()))
+        if f'current_tele_{cat}' in st.session_state:
+            del st.session_state[f'current_tele_{cat}']
         st.rerun()
 
 # 4. 망원경 운용 (망원경.py)
@@ -428,8 +429,10 @@ elif menu == "🔢 지학 계산기":
             st.error(f"다시 계산해보세요. (정답: {correct_ans})")
             
     if st.button("새로운 문제 생성"):
-        if 'geo_q' in st.session_state:
-            del st.session_state.geo_q
+        st.session_state.geo_type_idx += 1 # 다음 유형으로
+        # 기존 문제 데이터를 삭제해야 'if current_geo_q not in st.session_state'가 작동함
+        if 'current_geo_q' in st.session_state:
+            del st.session_state.current_geo_q
         st.rerun() 
 
 elif menu == "🧬 생물 퀴즈":
@@ -665,7 +668,7 @@ elif menu == "🧬 생물 퀴즈":
 
     with col2:
         if st.button("다음 문제"):
-            if idx < len(q_keys) - 1:
+            if st.session_state.bio_idx < len(st.session_state.bio_keys) - 1:
                 st.session_state.bio_idx += 1
                 st.rerun()
             else:
