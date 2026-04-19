@@ -272,8 +272,14 @@ elif menu == "🔭 망원경 구조":
             st.error(f"틀렸습니다. 정답은 [{parts[q_num]}]입니다.")
             
     if st.button("다른 번호 풀기"):
+        # 1. 지금 푼 번호를 '푼 목록'에 추가 (중복 방지)
+        st.session_state[f'solved_{cat}'].append(q_num)
+        
+        # 2. 현재 문제 데이터 삭제 (그래야 위에서 새로 뽑음)
         if f'current_tele_{cat}' in st.session_state:
             del st.session_state[f'current_tele_{cat}']
+            
+        # 3. 즉시 새로고침
         st.rerun()
 
 # 4. 망원경 운용 (망원경.py)
