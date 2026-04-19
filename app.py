@@ -20,7 +20,8 @@ db = load_db()
 
 if 'user' not in st.session_state:
     st.session_state.user = None
-
+if 'wrong_answers' not in st.session_state:
+    st.session_state.wrong_answers = []
 # --- [메인 화면에 로그인/회원가입 표시] ---
 if st.session_state.user is None:
     st.title("🔐 접속이 필요합니다")
@@ -75,7 +76,7 @@ for p in reversed(db["posts"]):
         st.write(p['content'])
 
 # --- [메뉴 설정] ---
-menu = st.sidebar.radio("활동 선택", ["📢 게시판", "🧪 화학 명명법", "🔭 망원경 구조", "🔭 망원경 운용 퀴즈", "🔢 지학 계산기", "🧬 생물 퀴즈"])
+menu = st.sidebar.radio("활동 선택", ["📢 게시판", "🧪 화학 명명법", "🔭 망원경 구조", "🔭 망원경 운용 퀴즈", "🔢 지학 계산기", "🧬 생물 퀴즈", "❌ 오답 노트"])
 
 # 1. 게시판 (기존 코드 유지)
 if menu == "📢 게시판":
@@ -200,6 +201,9 @@ elif menu == "🧪 화학 명명법":
             st.success(f"정답입니다! : {correct}")
         else:
             st.error(f"오답입니다. 정답은: {correct}")
+            new_wrong = {"category": "🧪 화학 명명법", "question": q_formula, "answer": correct_a}
+            if new_wrong not in st.session_state.wrong_answers:
+                st.session_state.wrong_answers.append(new_wrong)
             
     if col2.button("다음 문제"):
         st.session_state.chem_idx += 1
@@ -280,6 +284,9 @@ elif menu == "🔭 망원경 구조":
                 st.success(f"✅ 정답입니다! ({parts[q_num]})")
             else:
                 st.error(f"❌ 틀렸습니다. 정답은 [{parts[q_num]}]입니다.")
+                new_wrong = {"category": f"🔭 망원경 구조 ({cat})", "question": f"{q_num}번 부품", "answer": parts[q_num]}
+            if new_wrong not in st.session_state.wrong_answers:
+                st.session_state.wrong_answers.append(new_wrong)
 
     with col2:
         if st.button("다른 번호 풀기 (다음 문제)"):
@@ -388,6 +395,7 @@ elif menu == "🔭 망원경 운용 퀴즈":
             st.success("정답입니다!")
         else:
             st.error(f"오답입니다. 정답은: {q_item['options'][ans_idx]}")
+            
         st.info(f"해설: {q_item['explan']}")
     
     if st.button("다음 문제 넘어가기"):
@@ -441,6 +449,9 @@ elif menu == "🔢 지학 계산기":
             st.success("정답입니다! 계산 능력이 훌륭하시네요.")
         else:
             st.error(f"다시 계산해보세요. (정답: {correct_ans})")
+            new_wrong = {"category": "🔢 지학 계산기", "question": q_data["msg"], "answer": str(q_data["ans"])}
+                if new_wrong not in st.session_state.wrong_answers:
+                    st.session_state.wrong_answers.append(new_wrong)
             
     if st.button("새로운 문제 생성"):
         st.session_state.geo_type_idx += 1 # 다음 유형으로
@@ -679,6 +690,9 @@ elif menu == "🧬 생물 퀴즈":
                 st.success(f"정답입니다! 🎉 (정답: {correct_a})")
             else:
                 st.error(f"오답입니다. 정답은 [{correct_a}] 입니다.")
+                new_wrong = {"category": "🧬 생물 퀴즈", "question": current_q, "answer": correct_a}
+                if new_wrong not in st.session_state.wrong_answers:
+                    st.session_state.wrong_answers.append(new_wrong)
 
     with col2:
         if st.button("다음 문제"):
@@ -691,3 +705,18 @@ elif menu == "🧬 생물 퀴즈":
                 random.shuffle(st.session_state.bio_keys)
                 st.session_state.bio_idx = 0
                 st.rerun()
+
+elif menu == "❌ 오답 노트":
+    st.header("❌ 나만의 오답 노트")
+    
+    if not st.session_state.wrong_answers:
+        st.write("아직 틀린 문제가 없습니다. 완벽해요! 👍")
+    else:
+        if st.button("오답 노트 전체 초기화"):
+            st.session_state.wrong_answers = []
+            st.rerun()
+
+        # 틀린 문제들을 표나 리스트 형식으로 출력
+        for i, item in enumerate(st.session_state.wrong_answers):
+            with st.expander(f"{i+1}. [{item['category']}] {item['question']}"):
+                st.write(f"**정답:** {item['answer']}")
