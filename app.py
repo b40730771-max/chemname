@@ -450,8 +450,8 @@ elif menu == "🔢 지학 계산기":
         else:
             st.error(f"다시 계산해보세요. (정답: {correct_ans})")
             new_wrong = {"category": "🔢 지학 계산기", "question": q_data["msg"], "answer": str(q_data["ans"])}
-                if new_wrong not in st.session_state.wrong_answers:
-                    st.session_state.wrong_answers.append(new_wrong)
+            if new_wrong not in st.session_state.wrong_answers:
+                st.session_state.wrong_answers.append(new_wrong)
             
     if st.button("새로운 문제 생성"):
         st.session_state.geo_type_idx += 1 # 다음 유형으로
