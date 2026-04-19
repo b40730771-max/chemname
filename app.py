@@ -201,10 +201,8 @@ elif menu == "🧪 화학 명명법":
             st.success(f"정답입니다! : {correct}")
         else:
             st.error(f"오답입니다. 정답은: {correct}")
-            new_wrong = {"category": "🧪 화학 명명법", "question": q_formula, "answer": correct_a}
-            if new_wrong not in st.session_state.wrong_answers:
-                st.session_state.wrong_answers.append(new_wrong)
             
+        
     if col2.button("다음 문제"):
         st.session_state.chem_idx += 1
         st.rerun()
@@ -284,9 +282,7 @@ elif menu == "🔭 망원경 구조":
                 st.success(f"✅ 정답입니다! ({parts[q_num]})")
             else:
                 st.error(f"❌ 틀렸습니다. 정답은 [{parts[q_num]}]입니다.")
-                new_wrong = {"category": f"🔭 망원경 구조 ({cat})", "question": f"{q_num}번 부품", "answer": parts[q_num]}
-            if new_wrong not in st.session_state.wrong_answers:
-                st.session_state.wrong_answers.append(new_wrong)
+                
     with col2:
         if st.button("다른 번호 풀기 (다음 문제)"):
             # 현재 문제를 '푼 목록'에 저장
@@ -448,9 +444,7 @@ elif menu == "🔢 지학 계산기":
             st.success("정답입니다! 계산 능력이 훌륭하시네요.")
         else:
             st.error(f"다시 계산해보세요. (정답: {correct_ans})")
-            new_wrong = {"category": "🔢 지학 계산기", "question": q_data["msg"], "answer": str(q_data["ans"])}
-            if new_wrong not in st.session_state.wrong_answers:
-                st.session_state.wrong_answers.append(new_wrong)
+            
             
     if st.button("새로운 문제 생성"):
         st.session_state.geo_type_idx += 1 # 다음 유형으로
