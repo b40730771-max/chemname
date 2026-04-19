@@ -205,81 +205,61 @@ elif menu == "🧪 화학 명명법":
         st.session_state.chem_idx += 1
         st.rerun()
 
-# 3. 망원경 구조 (망원경 구조.py)
 elif menu == "🔭 망원경 구조":
-    st.header("🔭 망원경 부품 명칭 퀴즈")
-    
-    telescope_data = {
-        "가. 경통 (굴절 망원경)": {
-            "1": "후드",
-            "2": "렌즈셀",
-            "3": "경통밴드",
-            "4": "경통플레이트",
-            "5": "파인더",
-            "6": "파인더정렬나사",
-            "7": "파인더브라켓",
-            "8": "파인더고정나사",
-            "9": "초점조절나사",
-            "10": "초점고정나사",
-            "11": "접안부고정나사",
-            "12": "접안렌즈",
-            "13": "직각프리즘"
-        },
-        "나. 가대 (적도의식)": {
-            "1": "경통플레이트고정나사",
-            "2": "적위축고정클램프",
-            "3": "적위축수동클러치",
-            "4": "적위미동나사",
-            "5": "적경축수동클러치",
-            "6": "무게추",
-            "8": "적경축미동나사",
-            "9": "고도조절나사",
-            "11": "경통플레이트안전나사",
-            "16": "무게추봉",
-            "17": "무게추잠금나사",
-            "18": "무게추안전나사"
-        }
-    }
-    cat = st.selectbox("영역 선택", ["가. 경통 (굴절 망원경)", "나. 가대 (적도의식)"])
-    parts = telescope_data[cat]
-    
-    state_key = f"tele_list_{cat}"
-    idx_key = f"tele_idx_{cat}"
-    
-    if state_key not in st.session_state:
-        p_keys = list(parts.keys())
-        random.shuffle(p_keys)
-        st.session_state[state_key] = p_keys
-        st.session_state[idx_key] = 0
+    st.header("🔭 망원경 구조 명칭 맞추기")
 
-    curr_idx = st.session_state[idx_key]
+    telescope_data = {
+        "가. 경통 (굴절 망원경)": {"1": "대물렌즈", "2": "경통", "3": "접안렌즈", "4": "파인더"},
+        "나. 가대 (적도의식)": {"1": "적경축", "2": "적위축", "3": "균형추", "4": "극축망원경"}
+    }
     
-    if curr_idx >= len(st.session_state[state_key]):
-        st.warning("이 영역의 모든 문제를 풀었습니다. 처음부터 다시 시작합니다.")
-        random.shuffle(st.session_state[state_key])
-        st.session_state[idx_key] = 0
+    cat = st.selectbox("영역 선택", list(telescope_data.keys()))
+    parts = telescope_data[cat]
+
+    # --- [에러 방지 핵심 1: 모든 영역의 solved 리스트 미리 생성] ---
+    for c in telescope_data.keys():
+        if f'solved_{c}' not in st.session_state:
+            st.session_state[f'solved_{c}'] = []
+
+    # 현재 문제가 세션에 없거나, 영역(cat)이 바뀌었을 때 새로 뽑기
+    # 세션에 저장할 때 어떤 영역의 문제인지(q_cat)도 같이 저장해야 에러가 안 납니다.
+    if 'current_tele_data' not in st.session_state or st.session_state.get('current_tele_cat') != cat:
+        remaining = [p for p in parts.keys() if p not in st.session_state[f'solved_{cat}']]
+        
+        if not remaining:
+            st.success(f"✅ {cat}의 모든 문제를 풀었습니다! 기록을 초기화합니다.")
+            st.session_state[f'solved_{cat}'] = []
+            remaining = list(parts.keys())
+        
+        st.session_state['current_tele_q_num'] = random.choice(remaining)
+        st.session_state['current_tele_cat'] = cat # 현재 문제의 소속 영역 저장
+
+    q_num = st.session_state['current_tele_q_num']
+    # 혹시 모를 에러 방지: 현재 뽑힌 번호가 선택된 영역에 있는지 확인
+    if q_num not in parts:
+        del st.session_state['current_tele_data'] # 잘못된 데이터 삭제 후 리런
         st.rerun()
 
-    q_num = st.session_state[state_key][curr_idx]
     st.info(f"질문: {cat} - **[{q_num}번]** 부품 이름은?")
     
-    ans_t = st.text_input("부품 이름 입력", key="tele_ans")
+    user_ans = st.text_input("부품 이름 입력:", key=f"tele_{cat}_{q_num}").strip()
     
-    if st.button("채점하기"):
-        if ans_t.strip() == parts[q_num]:
-            st.success("정답입니다! 🎉")
+    if st.button("정답 확인"):
+        if user_ans == parts[q_num]:
+            st.success("🎉 정답입니다!")
         else:
             st.error(f"틀렸습니다. 정답은 [{parts[q_num]}]입니다.")
-            
+
+    # --- [에러 방지 핵심 2: 버튼 로직 수정] ---
     if st.button("다른 번호 풀기"):
-        # 1. 지금 푼 번호를 '푼 목록'에 추가 (중복 방지)
-        st.session_state[f'solved_{cat}'].append(q_num)
+        # 현재 문제의 '진짜 영역' 리스트에 추가 (에러 방지)
+        actual_cat = st.session_state['current_tele_cat']
+        st.session_state[f'solved_{actual_cat}'].append(q_num)
         
-        # 2. 현재 문제 데이터 삭제 (그래야 위에서 새로 뽑음)
-        if f'current_tele_{cat}' in st.session_state:
-            del st.session_state[f'current_tele_{cat}']
-            
-        # 3. 즉시 새로고침
+        # 데이터 삭제
+        if 'current_tele_q_num' in st.session_state:
+            del st.session_state['current_tele_q_num']
+        
         st.rerun()
 
 # 4. 망원경 운용 (망원경.py)
