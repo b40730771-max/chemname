@@ -394,11 +394,11 @@ elif menu == "🔢 지학 계산기":
             del st.session_state.geo_q
         st.rerun() 
 
+# 🧬 생물 퀴즈 (200문항 데이터 통합)
 elif menu == "🧬 생물 퀴즈":
-    st.header("🧬 무자비한 생물학 퀴즈 (200문항)")
-    
-    # 데이터셋 (생물.py 내용 일부 추출 - 나머지 문항도 동일한 방식으로 추가 가능)
+    st.header("🧬 생물학 무자비 퀴즈")
     if 'bio_data' not in st.session_state:
+        # 생물.py의 데이터 (예시 추출, 실제로는 200개를 여기에 다 넣으시면 됩니다)
         st.session_state.bio_data = [
             # --- 1. 화학결합과 약한 결합 (1~12) ---
         ("효소와 기질의 결합처럼 가역적이고 쉽게 분리/합성되어 구조 변화에 기여하는 결합은? (강한/약한 결합)", "약한 결합"),
@@ -614,35 +614,23 @@ elif menu == "🧬 생물 퀴즈":
         ("물질과 결합 시 구조가 변하며 특정 물질만 골라 수송하는 막단백질은 무슨 단백질인가?", "운반체 단백질")
         ]
         random.shuffle(st.session_state.bio_data)
+    
+    if 'bio_idx' not in st.session_state: st.session_state.bio_idx = 0
+    
+    idx = st.session_state.bio_idx
+    q_txt = st.session_state.bio_data[idx]
+    # 에러 방지용: 명확히 인덱스 접근 후 문자열 변환
+    correct_ans = str(st.session_state.bio_data[idx]) 
 
-    if 'bio_idx' not in st.session_state:
-        st.session_state.bio_idx = 0
+    st.subheader(f"Q{idx+1}. {q_txt}")
+    u_ans = st.text_input("정답 입력", key=f"b_{idx}")
 
-    # 문제 표시
-    q_list = st.session_state.bio_data
-    curr_idx = st.session_state.bio_idx
-    
-    st.progress((curr_idx + 1) / len(q_list))
-    st.subheader(f"문제 {curr_idx + 1}. {q_list[curr_idx]}")
-    
-    user_bio_ans = st.text_input("정답을 입력하세요", key=f"bio_ans_{curr_idx}")
-    
-    col1, col2 = st.columns(2)
-    if col1.button("정답 확인"):
-        correct_bio = q_list[curr_idx]
-        if user_bio_ans.strip().replace(" ", "") == correct_bio.replace(" ", ""):
-            st.success(f"정답입니다! 🎉 정답: {correct_bio}")
+    if st.button("정답 확인"):
+        if u_ans.strip().replace(" ","") == correct_ans.replace(" ",""):
+            st.success(f"정답입니다! 🎉")
         else:
-            st.error(f"아쉽습니다. 정답은 [{correct_bio}] 입니다.")
-            
-    if col2.button("다음 문제"):
-        if st.session_state.bio_idx < len(q_list) - 1:
-            st.session_state.bio_idx += 1
-            st.rerun()
-        else:
-            st.balloons()
-            st.success("모든 문제를 다 풀었습니다! 다시 시작하려면 버튼을 누르세요.")
-            if st.button("처음부터 다시하기"):
-                st.session_state.bio_idx = 0
-                random.shuffle(st.session_state.bio_data)
-                st.rerun()
+            st.error(f"오답입니다. 정답: {correct_ans}")
+
+    if st.button("다음 문제"):
+        st.session_state.bio_idx = (idx + 1) % len(st.session_state.bio_data)
+        st.rerun()
