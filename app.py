@@ -175,11 +175,21 @@ elif menu == "🧪 화학 명명법":
     idx = 0 if mode == "한글명" else 1
     
     # 세션 상태를 이용해 문제를 고정 (안 하면 입력할 때마다 문제가 바뀜)
-    if 'chem_q' not in st.session_state:
-        st.session_state.chem_q = random.choice(list(all_chem.keys()))
-    
-    q_formula = st.session_state.chem_q
-    st.subheader(f"문제: [{q_formula}]")
+    if 'chem_q_list' not in st.session_state:
+        all_keys = list(all_chem.keys())
+        random.shuffle(all_keys)
+        st.session_state.chem_q_list = all_keys
+        st.session_state.chem_idx = 0
+
+    # 모든 문제를 다 풀었을 경우 처리
+    if st.session_state.chem_idx >= len(st.session_state.chem_q_list):
+        st.success("모든 문제를 풀었습니다! 순서를 다시 섞습니다.")
+        random.shuffle(st.session_state.chem_q_list)
+        st.session_state.chem_idx = 0
+
+    # 현재 인덱스의 문제 가져오기
+    q_formula = st.session_state.chem_q_list[st.session_state.chem_idx]
+    st.subheader(f"문제 {st.session_state.chem_idx + 1}: [{q_formula}]")
     
     user_ans = st.text_input("이름을 입력하세요 (엔터키를 눌러 제출)")
     
@@ -233,11 +243,25 @@ elif menu == "🔭 망원경 구조":
     cat = st.selectbox("영역 선택", ["가. 경통 (굴절 망원경)", "나. 가대 (적도의식)"])
     parts = telescope_data[cat]
     
-    if 'tele_num' not in st.session_state:
-        st.session_state.tele_num = random.choice(list(parts.keys()))
-        
-    q_num = st.session_state.tele_num
-    st.info(f"질문: {cat} 파트의 **[{q_num}번]** 부품 이름은 무엇입니까?")
+    state_key = f"tele_list_{cat}"
+    idx_key = f"tele_idx_{cat}"
+    
+    if state_key not in st.session_state:
+        p_keys = list(parts.keys())
+        random.shuffle(p_keys)
+        st.session_state[state_key] = p_keys
+        st.session_state[idx_key] = 0
+
+    curr_idx = st.session_state[idx_key]
+    
+    if curr_idx >= len(st.session_state[state_key]):
+        st.warning("이 영역의 모든 문제를 풀었습니다. 처음부터 다시 시작합니다.")
+        random.shuffle(st.session_state[state_key])
+        st.session_state[idx_key] = 0
+        st.rerun()
+
+    q_num = st.session_state[state_key][curr_idx]
+    st.info(f"질문: {cat} - **[{q_num}번]** 부품 이름은?")
     
     ans_t = st.text_input("부품 이름 입력", key="tele_ans")
     
@@ -320,10 +344,24 @@ elif menu == "🔭 망원경 운용 퀴즈":
     all_cats = list(quiz_bank.keys())
     sel_cat = st.selectbox("학습 주제 선택", all_cats)
     
-    if f'quiz_idx_{sel_cat}' not in st.session_state:
-        st.session_state[f'quiz_idx_{sel_cat}'] = random.randint(0, len(quiz_bank[sel_cat])-1)
-    
-    q_idx = st.session_state[f'quiz_idx_{sel_cat}']
+    list_key = f"quiz_list_{sel_cat}"
+    idx_key = f"quiz_idx_{sel_cat}"
+
+    if list_key not in st.session_state:
+        q_indices = list(range(len(quiz_bank[sel_cat])))
+        random.shuffle(q_indices)
+        st.session_state[list_key] = q_indices
+        st.session_state[idx_key] = 0
+
+    curr_ptr = st.session_state[idx_key]
+
+    if curr_ptr >= len(st.session_state[list_key]):
+        st.success("해당 주제의 문제를 모두 확인했습니다! 다시 섞습니다.")
+        random.shuffle(st.session_state[list_key])
+        st.session_state[idx_key] = 0
+        st.rerun()
+
+    q_idx = st.session_state[list_key][curr_ptr]
     q_item = quiz_bank[sel_cat][q_idx]
     
     st.write(f"**Q. {q_item['question']}**")
