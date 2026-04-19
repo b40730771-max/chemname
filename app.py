@@ -287,7 +287,6 @@ elif menu == "🔭 망원경 구조":
                 new_wrong = {"category": f"🔭 망원경 구조 ({cat})", "question": f"{q_num}번 부품", "answer": parts[q_num]}
             if new_wrong not in st.session_state.wrong_answers:
                 st.session_state.wrong_answers.append(new_wrong)
-
     with col2:
         if st.button("다른 번호 풀기 (다음 문제)"):
             # 현재 문제를 '푼 목록'에 저장
