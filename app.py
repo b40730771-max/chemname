@@ -490,7 +490,7 @@ elif menu == "🔢 지학 계산기":
         elif current_type == "분해능":
             # 실무 공식보다 교과과정 약식(116/D)을 쓸지, 정밀공식을 쓸지에 따라 조정 가능
             # 여기서는 제시해주신 정밀 공식 형태를 유지하되 숫자를 다듬었습니다.
-            aperture = random.choice([1000, 2000, 3000, 4000, 1342, 2351, 2938, 2441, 5023, 3122)
+            aperture = random.choice([1000, 2000, 3000, 4000, 1342, 2351, 2938, 2441, 5023, 3122])
             wavelength_nm = 550 
             res_val = (1.22 * (wavelength_nm * 1e-6) / aperture) * 206265
             correct_ans = round(res_val, 2)
