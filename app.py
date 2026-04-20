@@ -436,7 +436,7 @@ elif menu == "🔢 지학 계산기":
 
         elif current_type == "배율":
             obj_fl = random.randint(500, 1500)
-            eye_fl = random.choice([100, 50, 10, 20, 25)
+            eye_fl = random.choice([100, 50, 10, 20, 25])
             correct_ans = round(obj_fl / eye_fl, 1)
             msg = f"[배율] 주경 초점거리 {obj_fl}mm, 접안렌즈 초점거리 {eye_fl}mm일 때 배율은?"
 
