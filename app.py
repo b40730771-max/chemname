@@ -397,62 +397,86 @@ elif menu == "🔭 망원경 운용 퀴즈":
         st.session_state[f'quiz_idx_{sel_cat}'] = random.randint(0, len(quiz_bank[sel_cat])-1)
         st.rerun()
 
-# 5. 지학 계산기 (지학.py)
 elif menu == "🔢 지학 계산기":
     st.header("🔢 지구과학 계산형 문제")
     st.write("문제를 풀고 답을 소수점 자리수에 맞춰 입력하세요.")
-    
-    # 세션에 문제 저장
+
+    # [1. 필수 초기화] 유형 리스트와 인덱스가 없으면 생성
+    if 'geo_type_list' not in st.session_state:
+        types = ["집광력", "초점비", "배율", "분해능"]
+        random.shuffle(types)
+        st.session_state.geo_type_list = types
+        st.session_state.geo_type_idx = 0
+
+    # [2. 인덱스 안전장치] AttributeError 방지
+    if 'geo_type_idx' not in st.session_state:
+        st.session_state.geo_type_idx = 0
+
+    # [3. 모든 유형 소진 시 리셋]
+    if st.session_state.geo_type_idx >= len(st.session_state.geo_type_list):
+        st.success("모든 유형을 완료했습니다! 순서를 다시 섞습니다.")
+        random.shuffle(st.session_state.geo_type_list)
+        st.session_state.geo_type_idx = 0
+
+    # [4. 현재 문제 생성 및 세션 고정] (정답 확인 시 숫자가 안 바뀌게 함)
     if 'geo_q' not in st.session_state:
-        # 지학.py의 problems 리스트에서 랜덤 선택 및 수치 생성 로직 실행
-        current_problem = random.choice(["집광력", "초점비", "배율", "분해능"])
-        if current_problem == "집광력":
+        current_type = st.session_state.geo_type_list[st.session_state.geo_type_idx]
+        
+        if current_type == "집광력":
             aperture = random.randint(5, 30) * 10
             correct_ans = round((aperture / 7)**2, 1)
-            msg = f"\n[문제] 구경이 {aperture}mm인 망원경의 집광력은? (소수점 첫째자리 반올림)"
+            msg = f"[집광력] 구경이 {aperture}mm인 망원경의 집광력은? (소수점 첫째자리 반올림)"
             
-        elif current_problem == "초점비":
+        elif current_type == "초점비":
             aperture = random.randint(5, 20) * 10
             f_ratio = random.randint(5, 12)
             f_length = aperture * f_ratio
             correct_ans = float(f_ratio)
-            msg = f"\n[문제] 구경 {aperture}mm, 초점거리 {f_length}mm인 망원경의 초점비(F)는 얼마인가?"
+            msg = f"[초점비] 구경 {aperture}mm, 초점거리 {f_length}mm인 망원경의 초점비(F)는 얼마인가?"
 
-        elif current_problem == "배율":
+        elif current_type == "배율":
             obj_fl = random.randint(500, 1500)
-            eye_fl = random.choice([10, 50])
+            eye_fl = random.choice([100, 50, 10, 20, 25)
             correct_ans = round(obj_fl / eye_fl, 1)
-            msg = f"\n[문제] 주경 초점거리 {obj_fl}mm, 접안렌즈 초점거리 {eye_fl}mm일 때 배율은?"
+            msg = f"[배율] 주경 초점거리 {obj_fl}mm, 접안렌즈 초점거리 {eye_fl}mm일 때 배율은?"
 
-        elif current_problem == "분해능":
-            aperture = random.choice([1000, 1100, 1200, 1300, 1600, 3000, 2500, 2300, 1900, 2000])
+        elif current_type == "분해능":
+            aperture = random.choice([1000, 2000, 3000, 2500, 1320, 3482, 1324, 8750, 5555, 5023, 3412])
             wavelength_nm = 550 
             res_val = (1.22 * (wavelength_nm * 1e-6) / aperture) * 206265
             correct_ans = round(res_val, 2)
-            msg = f"\n[문제] 구경 {aperture}mm, 파장 {wavelength_nm}nm일 때 분해능은 몇 초(\")인가? (소수점 둘째자리까지 반올림)"
+            msg = f"[분해능] 구경 {aperture}mm, 파장 {wavelength_nm}nm일 때 분해능은 몇 초(\")인가? (소수점 둘째자리 반올림)"
         
-        # 생성된 문제를 세션에 저장하는 이 줄이 빠져있었습니다.
         st.session_state.geo_q = (msg, correct_ans)
-        
-    # 세션에서 문제를 가져와 화면에 표시
+
+    # [5. UI 및 정답 확인]
     msg, correct_ans = st.session_state.geo_q
     st.warning(msg)
-    user_val = st.number_input("정답 입력", value=0.0, step=0.01, key="geo_input") # 분해능 때문에 step을 0.01로 권장
+    # key에 idx를 넣어 문제가 바뀔 때 입력창이 비워지게 함
+    user_val = st.number_input("정답 입력", value=0.0, step=0.01, key=f"geo_input_{st.session_state.geo_type_idx}")
     
-    if st.button("정답 확인"):
-        if abs(user_val - correct_ans) < 0.01: # 오차 범위 수정
-            st.success("정답입니다! 계산 능력이 훌륭하시네요.")
-        else:
-            st.error(f"다시 계산해보세요. (정답: {correct_ans})")
-            
-            
-    if st.button("새로운 문제 생성"):
-        st.session_state.geo_type_idx += 1 # 다음 유형으로
-        # 기존 문제 데이터를 삭제해야 'if current_geo_q not in st.session_state'가 작동함
-        if 'current_geo_q' in st.session_state:
-            del st.session_state.current_geo_q
-        st.rerun() 
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("정답 확인"):
+            if abs(user_val - correct_ans) < 0.05: # 오차 범위 약간 허용
+                st.success(f"정답입니다! (답: {correct_ans})")
+            else:
+                st.error(f"다시 계산해보세요. (정답: {correct_ans})")
+                
+                # --- 오답 노트 기록 추가 ---
+                new_wrong = {"category": "🔢 지학 계산기", "question": msg, "answer": str(correct_ans)}
+                if 'wrong_answers' not in st.session_state:
+                    st.session_state.wrong_answers = []
+                if new_wrong not in st.session_state.wrong_answers:
+                    st.session_state.wrong_answers.append(new_wrong)
 
+    with col2:
+        if st.button("새로운 문제 생성"):
+            st.session_state.geo_type_idx += 1 # 다음 유형으로
+            # geo_q를 삭제해야 다음 실행 때 if 'geo_q' not in st.session_state가 작동함
+            if 'geo_q' in st.session_state:
+                del st.session_state.geo_q
+            st.rerun()
 elif menu == "🧬 생물 퀴즈":
     st.header("🧬 무자비한 생물학 퀴즈 (200문항)")
 
