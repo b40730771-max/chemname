@@ -86,126 +86,120 @@ if menu == "📢 게시판":
             st.write(f"**{p['title']}**")
             st.write(p['content'])
 
-# 2. 화학 명명법 (화학 명명법.py + 복잡.py 통합)
 elif menu == "🧪 화학 명명법":
     st.header("🧪 화학 명명법 테스트")
     
-    # 두 파일의 데이터를 하나로 합침
+    # 데이터 정의 (생략 없이 유지)
     all_chem = {
-            "H": ["수소", "Hydrogen"],
-    "Li": ["리튬", "Lithium"], "Be": ["베릴륨", "Beryllium"],
-    "B": ["붕소", "Boron"], "C": ["탄소", "Carbon"],
-    "N": ["질소", "Nitrogen"], "O": ["산소", "Oxygen"],
-    "F": ["플루오린", "Fluorine"],
-    "Na": ["소듐", "Sodium"], "Mg": ["마그네슘", "Magnesium"],
-    "Al": ["알루미늄", "Aluminum"], "Si": ["규소", "Silicon"],
-    "P": ["인", "Phosphorus"], "S": ["황", "Sulfur"],
-    "Cl": ["염소", "Chlorine"],
-    "K": ["포타슘", "Potassium"], "Ca": ["칼슘", "Calcium"],
-    "Sc": ["스칸듐", "Scandium"], "Ti": ["티타늄", "Titanium"],
-    "V": ["바나듐", "Vanadium"], "Cr": ["크로뮴", "Chromium"],
-    "Mn": ["망가니즈", "Manganese"], "Fe": ["철", "Iron"],
-    "Co": ["코발트", "Cobalt"], "Ni": ["니켈", "Nickel"],
-    "Cu": ["구리", "Copper"], "Zn": ["아연", "Zinc"],
-    "Ga": ["갈륨", "Gallium"], 
-    "As": ["비소", "Arsenic"], "Se": ["셀레늄", "Selenium"],
-    "Br": ["브로민", "Bromine"], "Rb": ["루비듐", "Rubidium"],
-    "Sr": ["스트론튬", "Strontium"], "Ag": ["은", "Silver"],
-    "Cd": ["카드뮴", "Cadmium"], "Sn": ["주석", "Tin"],
-    "Sb": ["안티모니", "Antimony"], "Te": ["텔루륨", "Tellurium"],
-    "I": ["아이오딘", "Iodine"], "Cs": ["세슘", "Cesium"],
-    "Ba": ["바륨", "Barium"],
-    "NaBr": ["브로민화 소듐", "Sodium bromide"],
-    "Rb2O": ["산화 루비듐", "Rubidium oxide"],
-    "CaS": ["황화 칼슘", "Calcium sulfide"],
-    "AlI3": ["아이오딘화 알루미늄", "Aluminum iodide"],
-    "SrF2": ["플루오린화 스트론튬", "Strontium fluoride"],
-    "Al2Se3": ["셀레늄화 알루미늄", "Aluminum selenide"],
-    "K3N": ["질소화 포타슘", "Potassium nitride"],
-    "Mg3P2": ["인화 마그네슘", "Magnesium phosphide"],
-    "Hg2O": ["산화 수은(I)", "Mercury(I) oxide"],
-    "FeBr3": ["브로민화 철(III)", "Iron(III) bromide"],
-    "CoS": ["황화 코발트(II)", "Cobalt(II) sulfide"],
-    "TiCl4": ["염화 티타늄(IV)", "Titanium(IV) chloride"],
-    "Sn3N2": ["질소화 주석(II)", "Tin(II) nitride"],
-    "CoI3": ["아이오딘화 코발트(III)", "Cobalt(III) iodide"],
-    "HgO": ["산화 수은(II)", "Mercury(II) oxide"],
-    "Cr2S3": ["황화 크로뮴(III)", "Chromium(III) sulfide"],
-    "CsF": ["플루오린화 세슘", "Cesium fluoride"],
-    "Li3N": ["질소화 리튬", "Lithium nitride"],
-    "Ag2S": ["황화 은", "Silver sulfide"],
-    "MnO2": ["산화 망가니즈(IV)", "Manganese(IV) oxide"],
-    "TiO2": ["산화 티타늄(IV)", "Titanium(IV) oxide"],
-    "Sr3P2": ["인화 스트론튬", "Strontium phosphide"], 
-    "ZnCl2": ["염화 아연", "Zinc chloride"],
-    "SnF4": ["플루오린화 주석(IV)", "Tin(IV) fluoride"],
-    "Ca3N2": ["질소화 칼슘", "Calcium nitride"],
-    "Al2S3": ["황화 알루미늄", "Aluminum sulfide"],
-    "Hg2Se": ["셀레늄화 수은(I)", "Mercury(I) selenide"],
-    "AgI": ["아이오딘화 은", "Silver iodide"],
-    "BaSO3": ["아황산 바륨", "Barium sulfite"],
-    "NaNO2": ["아질산 소듐", "Sodium nitrite"],
-    "KMnO4": ["과망가니즈산 포타슘", "Potassium permanganate"],
-    "K2Cr2O7": ["중크로뮴산 포타슘", "Potassium dichromate"],
-    "Cr(OH)3": ["수산화 크로뮴(III)", "Chromium(III) hydroxide"],
-    "Mg(CN)2": ["사이안화 마그네슘", "Magnesium cyanide"],
-    "Pb(CO3)2": ["탄산 납(IV)", "Lead(IV) carbonate"],
-    "NH4C2H3O2": ["아세트산 암모늄", "Ammonium acetate"],
-    "SO2": ["이산화 황", "Sulfur dioxide"],
-    "P2S5": ["오황화 이인", "Diphosphorus pentasulfide"],
-    "As2O3": ["삼산화 이비소", "Diarsenic trioxide"],
-    "AsF5": ["오플루오린화 비소", "Arsenic pentafluoride"],
-    "N2O": ["일산화 이질소", "Dinitrogen monoxide"],
-    "SF6": ["육플루오린화 황", "Sulfur hexafluoride"],
-    "CuI": ["아이오딘화 구리(I)", "Copper(I) iodide"],
-    "CuI2": ["아이오딘화 구리(II)", "Copper(II) iodide"],
-    "S4N4": ["사질소 사황", "Tetrasulfur tetranitride"],
-    "SeCl4": ["사염화 셀레늄", "Selenium tetrachloride"],
-    "Na2CO3": ["탄산 소듐", "Sodium carbonate"],
-    "NaHCO3": ["탄산수소 소듐", "Sodium hydrogen carbonate"],
-    "NaOCl": ["차아염소산 소듐", "Sodium hypochlorite"],
-    "BaCrO4": ["크로뮴산 바륨", "Barium chromate"],
-    "NH4NO3": ["질산 암모늄", "Ammonium nitrate"],
-    "H2SO4": ["황산", "Sulfuric acid"],
-    "HClO": ["차아염소산", "Hypochlorous acid"],
-    "HNO2": ["아질산", "Nitrous acid"],
-    "H3PO4": ["인산", "Phosphoric acid"]
+        "H": ["수소", "Hydrogen"], "Li": ["리튬", "Lithium"], "Be": ["베릴륨", "Beryllium"],
+        "B": ["붕소", "Boron"], "C": ["탄소", "Carbon"], "N": ["질소", "Nitrogen"],
+        "O": ["산소", "Oxygen"], "F": ["플루오린", "Fluorine"], "Na": ["소듐", "Sodium"],
+        "Mg": ["마그네슘", "Magnesium"], "Al": ["알루미늄", "Aluminum"], "Si": ["규소", "Silicon"],
+        "P": ["인", "Phosphorus"], "S": ["황", "Sulfur"], "Cl": ["염소", "Chlorine"],
+        "K": ["포타슘", "Potassium"], "Ca": ["칼슘", "Calcium"], "Sc": ["스칸듐", "Scandium"],
+        "Ti": ["티타늄", "Titanium"], "V": ["바나듐", "Vanadium"], "Cr": ["크로뮴", "Chromium"],
+        "Mn": ["망가니즈", "Manganese"], "Fe": ["철", "Iron"], "Co": ["코발트", "Cobalt"],
+        "Ni": ["니켈", "Nickel"], "Cu": ["구리", "Copper"], "Zn": ["아연", "Zinc"],
+        "Ga": ["갈륨", "Gallium"], "As": ["비소", "Arsenic"], "Se": ["셀레늄", "Selenium"],
+        "Br": ["브로민", "Bromine"], "Rb": ["루비듐", "Rubidium"], "Sr": ["스트론튬", "Strontium"],
+        "Ag": ["은", "Silver"], "Cd": ["카드뮴", "Cadmium"], "Sn": ["주석", "Tin"],
+        "Sb": ["안티모니", "Antimony"], "Te": ["텔루륨", "Tellurium"], "I": ["아이오딘", "Iodine"],
+        "Cs": ["세슘", "Cesium"], "Ba": ["바륨", "Barium"],
+        "NaBr": ["브로민화 소듐", "Sodium bromide"], "Rb2O": ["산화 루비듐", "Rubidium oxide"],
+        "CaS": ["황화 칼슘", "Calcium sulfide"], "AlI3": ["아이오딘화 알루미늄", "Aluminum iodide"],
+        "SrF2": ["플루오린화 스트론튬", "Strontium fluoride"], "Al2Se3": ["셀레늄화 알루미늄", "Aluminum selenide"],
+        "K3N": ["질소화 포타슘", "Potassium nitride"], "Mg3P2": ["인화 마그네슘", "Magnesium phosphide"],
+        "Hg2O": ["산화 수은(I)", "Mercury(I) oxide"], "FeBr3": ["브로민화 철(III)", "Iron(III) bromide"],
+        "CoS": ["황화 코발트(II)", "Cobalt(II) sulfide"], "TiCl4": ["염화 티타늄(IV)", "Titanium(IV) chloride"],
+        "Sn3N2": ["질소화 주석(II)", "Tin(II) nitride"], "CoI3": ["아이오딘화 코발트(III)", "Cobalt(III) iodide"],
+        "HgO": ["산화 수은(II)", "Mercury(II) oxide"], "Cr2S3": ["황화 크로뮴(III)", "Chromium(III) sulfide"],
+        "CsF": ["플루오린화 세슘", "Cesium fluoride"], "Li3N": ["질소화 리튬", "Lithium nitride"],
+        "Ag2S": ["황화 은", "Silver sulfide"], "MnO2": ["산화 망가니즈(IV)", "Manganese(IV) oxide"],
+        "TiO2": ["산화 티타늄(IV)", "Titanium(IV) oxide"], "Sr3P2": ["인화 스트론튬", "Strontium phosphide"],
+        "ZnCl2": ["염화 아연", "Zinc chloride"], "SnF4": ["플루오린화 주석(IV)", "Tin(IV) fluoride"],
+        "Ca3N2": ["질소화 칼슘", "Calcium nitride"], "Al2S3": ["황화 알루미늄", "Aluminum sulfide"],
+        "Hg2Se": ["셀레늄화 수은(I)", "Mercury(I) selenide"], "AgI": ["아이오딘화 은", "Silver iodide"],
+        "BaSO3": ["아황산 바륨", "Barium sulfite"], "NaNO2": ["아질산 소듐", "Sodium nitrite"],
+        "KMnO4": ["과망가니즈산 포타슘", "Potassium permanganate"], "K2Cr2O7": ["중크로뮴산 포타슘", "Potassium dichromate"],
+        "Cr(OH)3": ["수산화 크로뮴(III)", "Chromium(III) hydroxide"], "Mg(CN)2": ["사이안화 마그네슘", "Magnesium cyanide"],
+        "Pb(CO3)2": ["탄산 납(IV)", "Lead(IV) carbonate"], "NH4C2H3O2": ["아세트산 암모늄", "Ammonium acetate"],
+        "SO2": ["이산화 황", "Sulfur dioxide"], "P2S5": ["오황화 이인", "Diphosphorus pentasulfide"],
+        "As2O3": ["삼산화 이비소", "Diarsenic trioxide"], "AsF5": ["오플루오린화 비소", "Arsenic pentafluoride"],
+        "N2O": ["일산화 이질소", "Dinitrogen monoxide"], "SF6": ["육플루오린화 황", "Sulfur hexafluoride"],
+        "CuI": ["아이오딘화 구리(I)", "Copper(I) iodide"], "CuI2": ["아이오딘화 구리(II)", "Copper(II) iodide"],
+        "S4N4": ["사질소 사황", "Tetrasulfur tetranitride"], "SeCl4": ["사염화 셀레늄", "Selenium tetrachloride"],
+        "Na2CO3": ["탄산 소듐", "Sodium carbonate"], "NaHCO3": ["탄산수소 소듐", "Sodium hydrogen carbonate"],
+        "NaOCl": ["차아염소산 소듐", "Sodium hypochlorite"], "BaCrO4": ["크로뮴산 바륨", "Barium chromate"],
+        "NH4NO3": ["질산 암모늄", "Ammonium nitrate"], "H2SO4": ["황산", "Sulfuric acid"],
+        "HClO": ["차아염소산", "Hypochlorous acid"], "HNO2": ["아질산", "Nitrous acid"],
+        "H3PO4": ["인산", "Phosphoric acid"]
     }
     
     mode = st.radio("정답 언어 선택", ["한글명", "영어명"], horizontal=True)
-    idx = 0 if mode == "한글명" else 1
+    ans_idx = 0 if mode == "한글명" else 1
     
-    # 세션 상태를 이용해 문제를 고정 (안 하면 입력할 때마다 문제가 바뀜)
+    # [상태 관리 초기화]
     if 'chem_q_list' not in st.session_state:
         all_keys = list(all_chem.keys())
         random.shuffle(all_keys)
         st.session_state.chem_q_list = all_keys
         st.session_state.chem_idx = 0
 
-    # 모든 문제를 다 풀었을 경우 처리
     if st.session_state.chem_idx >= len(st.session_state.chem_q_list):
         st.success("모든 문제를 풀었습니다! 순서를 다시 섞습니다.")
         random.shuffle(st.session_state.chem_q_list)
         st.session_state.chem_idx = 0
 
-    # 현재 인덱스의 문제 가져오기
     q_formula = st.session_state.chem_q_list[st.session_state.chem_idx]
+    correct_name = all_chem[q_formula][ans_idx]
+
+    # --- [엔터 자동 채점 함수] ---
+    def check_chem_ans():
+        user_val = st.session_state[f"chem_input_{st.session_state.chem_idx}"]
+        clean_user = user_val.strip().replace(" ", "").lower()
+        clean_correct = correct_name.strip().replace(" ", "").lower()
+        
+        if clean_user == clean_correct:
+            st.session_state.chem_feedback = ("success", f"정답입니다! : {correct_name}")
+        else:
+            st.session_state.chem_feedback = ("error", f"오답입니다. 정답은: {correct_name}")
+            # 오답 노트 기록
+            new_wrong = {"category": f"🧪 화학 명명법 ({mode})", "question": q_formula, "answer": correct_name}
+            if 'wrong_answers' not in st.session_state:
+                st.session_state.wrong_answers = []
+            if new_wrong not in st.session_state.wrong_answers:
+                st.session_state.wrong_answers.append(new_wrong)
+
     st.subheader(f"문제 {st.session_state.chem_idx + 1}: [{q_formula}]")
     
-    user_ans = st.text_input("이름을 입력하세요 (엔터키를 눌러 제출)")
+    # 입력창 (on_change 적용)
+    user_ans = st.text_input(
+        "이름을 입력하세요 (엔터키 가능)", 
+        key=f"chem_input_{st.session_state.chem_idx}", 
+        on_change=check_chem_ans
+    )
     
-    col1, col2 = st.columns(2)
-    if col1.button("정답 확인"):
-        correct = all_chem[q_formula][idx]
-        if user_ans.replace(" ","").lower() == correct.replace(" ","").lower():
-            st.success(f"정답입니다! : {correct}")
+    # 피드백 표시
+    if 'chem_feedback' in st.session_state:
+        status, msg = st.session_state.chem_feedback
+        if status == "success":
+            st.success(msg)
         else:
-            st.error(f"오답입니다. 정답은: {correct}")
+            st.error(msg)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        # 버튼으로도 채점 가능하도록 유지
+        if st.button("정답 확인"):
+            check_chem_ans()
+            st.rerun()
             
-        
-    if col2.button("다음 문제"):
-        st.session_state.chem_idx += 1
-        st.rerun()
+    with col2:
+        if st.button("다음 문제"):
+            st.session_state.chem_idx += 1
+            if 'chem_feedback' in st.session_state:
+                del st.session_state.chem_feedback
+            st.rerun()
 
 elif menu == "🔭 망원경 구조":
     st.header("🔭 망원경 구조 명칭 맞추기")
@@ -213,86 +207,98 @@ elif menu == "🔭 망원경 구조":
     # 1. 데이터 정의
     telescope_data = {
         "가. 경통 (굴절 망원경)": {
-            "1": "후드",
-            "2": "렌즈셀",
-            "3": "경통밴드",
-            "4": "경통플레이트",
-            "5": "파인더",
-            "6": "파인더정렬나사",
-            "7": "파인더브라켓",
-            "8": "파인더고정나사",
-            "9": "초점조절나사",
-            "10": "초점고정나사",
-            "11": "접안부고정나사",
-            "12": "접안렌즈",
-            "13": "직각프리즘"
+            "1": "후드", "2": "렌즈셀", "3": "경통밴드", "4": "경통플레이트",
+            "5": "파인더", "6": "파인더정렬나사", "7": "파인더브라켓", "8": "파인더고정나사",
+            "9": "초점조절나사", "10": "초점고정나사", "11": "접안부고정나사", "12": "접안렌즈", "13": "직각프리즘"
         },
         "나. 가대 (적도의식)": {
-            "1": "경통플레이트고정나사",
-            "2": "적위축고정클램프",
-            "3": "적위축수동클러치",
-            "4": "적위미동나사",
-            "5": "적경축수동클러치",
-            "6": "무게추",
-            "8": "적경축미동나사",
-            "9": "고도조절나사",
-            "11": "경통플레이트안전나사",
-            "16": "무게추봉",
-            "17": "무게추잠금나사",
-            "18": "무게추안전나사"
+            "1": "경통플레이트고정나사", "2": "적위축고정클램프", "3": "적위축수동클러치", "4": "적위미동나사",
+            "5": "적경축수동클러치", "6": "무게추", "8": "적경축미동나사", "9": "고도조절나사",
+            "11": "경통플레이트안전나사", "16": "무게추봉", "17": "무게추잠금나사", "18": "무게추안전나사"
         }
     }
     
     cat = st.selectbox("영역 선택", list(telescope_data.keys()))
     parts = telescope_data[cat]
 
-    # 2. 세션 초기화 (중복 방지 및 에러 방지용 리스트)
+    # 2. 세션 초기화
     if 'tele_solved_dict' not in st.session_state:
-        # 모든 카테고리에 대해 푼 문제 리스트를 미리 준비
         st.session_state.tele_solved_dict = {c: [] for c in telescope_data.keys()}
 
     # 3. 문제 추출 로직
-    # 현재 카테고리에서 이미 푼 문제를 제외한 리스트 생성
     solved_list = st.session_state.tele_solved_dict[cat]
     remaining = [p for p in parts.keys() if p not in solved_list]
 
-    # 모든 문제를 다 풀었을 경우 초기화
     if not remaining:
         st.success(f"🎉 {cat}의 모든 문제를 풀었습니다! 다시 시작합니다.")
         st.session_state.tele_solved_dict[cat] = []
         remaining = list(parts.keys())
 
-    # 화면에 보여줄 문제가 없거나, 카테고리가 바뀌었다면 새로 뽑기
+    # 문제나 카테고리가 바뀌면 피드백 삭제
     if 'current_tele_q' not in st.session_state or st.session_state.get('last_cat') != cat:
         st.session_state.current_tele_q = random.choice(remaining)
         st.session_state.last_cat = cat
+        if 'tele_feedback' in st.session_state:
+            del st.session_state.tele_feedback
 
     q_num = st.session_state.current_tele_q
+    correct_name = parts[q_num]
+
+    # --- [엔터 자동 채점 함수] ---
+    def check_tele_ans():
+        # 사용자가 입력한 값 가져오기
+        user_val = st.session_state[f"input_{cat}_{q_num}"].strip()
+        
+        if user_val == correct_name:
+            st.session_state.tele_feedback = ("success", f"✅ 정답입니다! ({correct_name})")
+        else:
+            st.session_state.tele_feedback = ("error", f"❌ 틀렸습니다. 정답은 [{correct_name}]입니다.")
+            # 오답 노트 기록
+            new_wrong = {
+                "category": f"🔭 망원경 구조 ({cat})", 
+                "question": f"{q_num}번 부품", 
+                "answer": correct_name
+            }
+            if 'wrong_answers' not in st.session_state:
+                st.session_state.wrong_answers = []
+            if new_wrong not in st.session_state.wrong_answers:
+                st.session_state.wrong_answers.append(new_wrong)
 
     # 4. 퀴즈 UI
     st.info(f"질문: {cat} - **[{q_num}번]** 부품 이름은?")
     
-    # 텍스트 입력 (key에 카테고리와 번호를 넣어 자동 초기화되게 함)
-    user_ans = st.text_input("부품 이름 입력:", key=f"input_{cat}_{q_num}").strip()
+    # 텍스트 입력 (on_change 추가)
+    st.text_input(
+        "부품 이름 입력 (엔터 가능):", 
+        key=f"input_{cat}_{q_num}",
+        on_change=check_tele_ans
+    )
     
+    # 채점 결과 표시
+    if 'tele_feedback' in st.session_state:
+        status, msg = st.session_state.tele_feedback
+        if status == "success":
+            st.success(msg)
+        else:
+            st.error(msg)
+
     col1, col2 = st.columns(2)
     with col1:
         if st.button("정답 확인"):
-            if user_ans == parts[q_num]:
-                st.success(f"✅ 정답입니다! ({parts[q_num]})")
-            else:
-                st.error(f"❌ 틀렸습니다. 정답은 [{parts[q_num]}]입니다.")
-                
+            check_tele_ans()
+            st.rerun()
+
     with col2:
         if st.button("다른 번호 풀기 (다음 문제)"):
             # 현재 문제를 '푼 목록'에 저장
             st.session_state.tele_solved_dict[cat].append(q_num)
-            # 현재 문제 정보 삭제하여 새로 뽑게 유도
+            # 현재 문제 정보 및 피드백 삭제
             if 'current_tele_q' in st.session_state:
                 del st.session_state.current_tele_q
+            if 'tele_feedback' in st.session_state:
+                del st.session_state.tele_feedback
             st.rerun()
 
-# 4. 망원경 운용 (망원경.py)
 elif menu == "🔭 망원경 운용 퀴즈":
     st.header("🔭 망원경 설치 및 운용 4지선다")
     
@@ -330,7 +336,7 @@ elif menu == "🔭 망원경 운용 퀴즈":
             {"question": "파인더 정렬은 언제 하는 것이 가장 효율적인가?", "options": ["한밤중", "밝은 낮 또는 해질녘", "비오는 날", "상관없음"], "answer": 1, "explan": "밝을 때 지상 물체를 보고 미리 정렬해두어야 밤에 별을 찾기 쉽습니다."},
             {"question": "파인더 내부의 십자선 모양은 보통 어떤 형태인가?", "options": ["원형", "십자(+) 모양", "삼각형", "없음"], "answer": 1, "explan": "정확한 중심을 가리키기 위해 십자선이 그려져 있습니다."},
             {"question": "파인더의 상이 흐리다면 어디를 돌려야 하는가?", "options": ["가대 나사", "파인더의 접안부 쪽(초점 조절부)", "주망원경 포커서", "무게추"], "answer": 1, "explan": "파인더 자체에도 별도의 초점 조절 기능이 있습니다."},
-            {"question": "정렬이 끝난 후 최종 확인 방법은?", "options": ["눈을 감아본다", "두 망원경 중앙에 같은 물체가 있는지 확인", "망원경을 흔들어본다", "무게추를 옮겨본다"], "answer": 1, "explan": "주망원경과 파인더가 동일한 지점을 가리키는지 더블 체크합니다."},
+            {"question": "정렬 끝난 후 최종 확인 방법은?", "options": ["눈을 감아본다", "두 망원경 중앙에 같은 물체가 있는지 확인", "망원경을 흔들어본다", "무게추를 옮겨본다"], "answer": 1, "explan": "주망원경과 파인더가 동일한 지점을 가리키는지 더블 체크합니다."},
             {"question": "파인더 정렬을 건너뛰면 발생하는 문제는?", "options": ["상이 어두워짐", "원하는 별을 찾기가 매우 힘들어짐", "배율이 낮아짐", "망원경이 쓰러짐"], "answer": 1, "explan": "시야가 좁은 주망원경만으로는 작은 별을 찾기가 거의 불가능합니다."},
         ],
         "초점 맞추기": [
@@ -358,12 +364,14 @@ elif menu == "🔭 망원경 운용 퀴즈":
             {"question": "균형 잡기를 귀찮아서 건너뛰면?", "options": ["전문가처럼 보임", "장비 고장의 원인이 됨", "별이 더 잘 보임", "시간이 절약됨"], "answer": 1, "explan": "결국 기계적 결함으로 이어져 더 큰 비용과 시간을 낭비하게 됩니다."},
         ]
     }
+
     all_cats = list(quiz_bank.keys())
     sel_cat = st.selectbox("학습 주제 선택", all_cats)
     
     list_key = f"quiz_list_{sel_cat}"
     idx_key = f"quiz_idx_{sel_cat}"
 
+    # 세션 초기화
     if list_key not in st.session_state:
         q_indices = list(range(len(quiz_bank[sel_cat])))
         random.shuffle(q_indices)
@@ -372,6 +380,7 @@ elif menu == "🔭 망원경 운용 퀴즈":
 
     curr_ptr = st.session_state[idx_key]
 
+    # 모든 문제 소진 시
     if curr_ptr >= len(st.session_state[list_key]):
         st.success("해당 주제의 문제를 모두 확인했습니다! 다시 섞습니다.")
         random.shuffle(st.session_state[list_key])
@@ -380,22 +389,60 @@ elif menu == "🔭 망원경 운용 퀴즈":
 
     q_idx = st.session_state[list_key][curr_ptr]
     q_item = quiz_bank[sel_cat][q_idx]
-    
-    st.write(f"**Q. {q_item['question']}**")
-    user_choice = st.radio("보기", q_item['options'])
-    
-    if st.button("결과 보기"):
-        ans_idx = q_item['answer'] # 0, 1, 2, 3 형태
-        if user_choice == q_item['options'][ans_idx]:
-            st.success("정답입니다!")
+
+    # --- [자동 채점 함수 정의] ---
+    def check_quiz_ans():
+        # st.radio의 현재 선택값 가져오기
+        selected = st.session_state[f"radio_{sel_cat}_{q_idx}"]
+        ans_text = q_item['options'][q_item['answer']]
+        
+        if selected == ans_text:
+            st.session_state.quiz_feedback = ("success", "✅ 정답입니다!")
         else:
-            st.error(f"오답입니다. 정답은: {q_item['options'][ans_idx]}")
-            
-        st.info(f"해설: {q_item['explan']}")
+            st.session_state.quiz_feedback = ("error", f"❌ 오답입니다. 정답은: {ans_text}")
+            # 오답 노트 기록
+            new_wrong = {
+                "category": f"🔭 망원경 운용 ({sel_cat})",
+                "question": q_item['question'],
+                "answer": ans_text
+            }
+            if 'wrong_answers' not in st.session_state:
+                st.session_state.wrong_answers = []
+            if new_wrong not in st.session_state.wrong_answers:
+                st.session_state.wrong_answers.append(new_wrong)
+
+    st.write(f"**Q. {q_item['question']}**")
     
-    if st.button("다음 문제 넘어가기"):
-        st.session_state[f'quiz_idx_{sel_cat}'] = random.randint(0, len(quiz_bank[sel_cat])-1)
-        st.rerun()
+    # 라디오 버튼 (on_change를 넣어 선택 즉시 채점)
+    user_choice = st.radio(
+        "보기", 
+        q_item['options'], 
+        key=f"radio_{sel_cat}_{q_idx}",
+        on_change=check_quiz_ans
+    )
+    
+    # 결과 및 해설 표시
+    if 'quiz_feedback' in st.session_state:
+        status, msg = st.session_state.quiz_feedback
+        if status == "success":
+            st.success(msg)
+        else:
+            st.error(msg)
+        st.info(f"💡 해설: {q_item['explan']}")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        # 버튼으로도 채점 확인 가능
+        if st.button("결과 보기"):
+            check_quiz_ans()
+            st.rerun()
+            
+    with col2:
+        if st.button("다음 문제 넘어가기"):
+            st.session_state[idx_key] += 1
+            if 'quiz_feedback' in st.session_state:
+                del st.session_state.quiz_feedback
+            st.rerun()
 
 elif menu == "🔢 지학 계산기":
     st.header("🔢 지구과학 계산형 문제")
@@ -477,12 +524,12 @@ elif menu == "🔢 지학 계산기":
             if 'geo_q' in st.session_state:
                 del st.session_state.geo_q
             st.rerun()
+            
 elif menu == "🧬 생물 퀴즈":
-    st.header("🧬 무자비한 생물학 퀴즈 (200문항)")
+    st.header("🧬 무자비한 생물학 퀴즈 (189문항)")
 
-    # 1. 딕셔너리 형태로 데이터 정의 (화학 명명법과 동일한 메커니즘)
+    # 1. 데이터 정의 (세션에 저장)
     if 'bio_dict_data' not in st.session_state:
-        # {"문제": "정답"} 형식의 딕셔너리
         st.session_state.bio_dict_data = {
             "효소와 기질의 결합처럼 가역적이고 쉽게 분리/합성되어 구조 변화에 기여하는 결합은? (강한/약한 결합)": "약한 결합",
             "세포골격을 따라 운동단백질이 이동할 수 있는 이유는 어떤 결합 덕분인가?": "약한 결합",
@@ -674,53 +721,76 @@ elif menu == "🧬 생물 퀴즈":
             "물 분자가 세포막을 빠르게 통과할 수 있도록 도와주는 전용 통로 단백질의 이름은?": "아쿠아포린",
             "물질과 결합 시 구조가 변하며 특정 물질만 골라 수송하는 막단백질은 무슨 단백질인가?": "운반체 단백질"
         }
-        # 랜덤 출제를 위해 키 리스트를 셔플
         st.session_state.bio_keys = list(st.session_state.bio_dict_data.keys())
         random.shuffle(st.session_state.bio_keys)
 
-    # 2. 인덱스 및 상태 관리
+    # 2. 인덱스 및 상태 초기화
     if 'bio_idx' not in st.session_state:
         st.session_state.bio_idx = 0
 
     idx = st.session_state.bio_idx
     q_keys = st.session_state.bio_keys
-    
+    current_q = q_keys[idx]
+    correct_a = st.session_state.bio_dict_data[current_q]
+
+    # --- [채점 함수 정의] ---
+    def check_bio_ans():
+        user_val = st.session_state[f"bio_input_{idx}"].strip().replace(" ", "").lower()
+        clean_correct = correct_a.strip().replace(" ", "").lower()
+        
+        if user_val == clean_correct:
+            st.session_state.bio_feedback = ("success", f"✅ 정답입니다! (정답: {correct_a})")
+        else:
+            st.session_state.bio_feedback = ("error", f"❌ 오답입니다. 정답은 [{correct_a}] 입니다.")
+            # 오답 노트 기록
+            new_wrong = {"category": "🧬 생물 퀴즈", "question": current_q, "answer": correct_a}
+            if 'wrong_answers' not in st.session_state:
+                st.session_state.wrong_answers = []
+            if new_wrong not in st.session_state.wrong_answers:
+                st.session_state.wrong_answers.append(new_wrong)
+
     # 3. UI 구성
     st.write(f"📊 진행 상황: {idx + 1} / {len(q_keys)}")
     st.progress((idx + 1) / len(q_keys))
 
-    current_q = q_keys[idx]
-    correct_a = st.session_state.bio_dict_data[current_q]
-
     st.info(f"질문: {current_q}")
-    user_input = st.text_input("정답 입력", key=f"bio_input_{idx}")
+    
+    # 텍스트 입력 (엔터키 자동 채점 적용)
+    st.text_input(
+        "정답 입력 (엔터 가능):", 
+        key=f"bio_input_{idx}",
+        on_change=check_bio_ans
+    )
+
+    # 채점 결과 표시
+    if 'bio_feedback' in st.session_state:
+        status, msg = st.session_state.bio_feedback
+        if status == "success":
+            st.success(msg)
+        else:
+            st.error(msg)
 
     col1, col2 = st.columns(2)
-
     with col1:
         if st.button("정답 확인"):
-            # 화학 명명법과 동일하게 공백 제거 및 소문자 처리 후 비교
-            clean_user = user_input.strip().replace(" ", "").lower()
-            clean_correct = correct_a.strip().replace(" ", "").lower()
-            
-            if clean_user == clean_correct:
-                st.success(f"정답입니다! 🎉 (정답: {correct_a})")
-            else:
-                st.error(f"오답입니다. 정답은 [{correct_a}] 입니다.")
-                new_wrong = {"category": "🧬 생물 퀴즈", "question": current_q, "answer": correct_a}
-                if new_wrong not in st.session_state.wrong_answers:
-                    st.session_state.wrong_answers.append(new_wrong)
+            check_bio_ans()
+            st.rerun()
 
     with col2:
         if st.button("다음 문제"):
             if st.session_state.bio_idx < len(st.session_state.bio_keys) - 1:
                 st.session_state.bio_idx += 1
+                # 피드백 초기화
+                if 'bio_feedback' in st.session_state:
+                    del st.session_state.bio_feedback
                 st.rerun()
             else:
                 st.balloons()
                 st.success("모든 문항을 완료했습니다! 다시 섞어 시작합니다.")
                 random.shuffle(st.session_state.bio_keys)
                 st.session_state.bio_idx = 0
+                if 'bio_feedback' in st.session_state:
+                    del st.session_state.bio_feedback
                 st.rerun()
 
 elif menu == "❌ 오답 노트":
