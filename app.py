@@ -76,8 +76,8 @@ for p in reversed(db["posts"]):
         st.write(p['content'])
 
 # --- [메뉴 설정] ---
-menu = st.sidebar.radio("활동 선택", ["📢 게시판", "🧪 화학 명명법", "🔭 망원경 구조", "🔭 망원경 운용 퀴즈", "🔢 지학 계산기", "🧬 생물 퀴즈", "❌ 오답 노트"])
-
+menu = st.sidebar.radio("활동 선택", ["📢 게시판", "❌ 오답 노트"])
+# , "🧪 화학 명명법", "🔭 망원경 구조", "🔭 망원경 운용 퀴즈", "🔢 지학 계산기", "🧬 생물 퀴즈", 
 # 1. 게시판 (기존 코드 유지)
 if menu == "📢 게시판":
     st.subheader("📚 올라온 자료")
@@ -86,740 +86,740 @@ if menu == "📢 게시판":
             st.write(f"**{p['title']}**")
             st.write(p['content'])
 
-elif menu == "🧪 화학 명명법":
-    st.header("🧪 화학 명명법 테스트")
+# elif menu == "🧪 화학 명명법":
+#     st.header("🧪 화학 명명법 테스트")
     
-    # 데이터 정의 (생략 없이 유지)
-    all_chem = {
-        "H": ["수소", "Hydrogen"], "Li": ["리튬", "Lithium"], "Be": ["베릴륨", "Beryllium"],
-        "B": ["붕소", "Boron"], "C": ["탄소", "Carbon"], "N": ["질소", "Nitrogen"],
-        "O": ["산소", "Oxygen"], "F": ["플루오린", "Fluorine"], "Na": ["소듐", "Sodium"],
-        "Mg": ["마그네슘", "Magnesium"], "Al": ["알루미늄", "Aluminum"], "Si": ["규소", "Silicon"],
-        "P": ["인", "Phosphorus"], "S": ["황", "Sulfur"], "Cl": ["염소", "Chlorine"],
-        "K": ["포타슘", "Potassium"], "Ca": ["칼슘", "Calcium"], "Sc": ["스칸듐", "Scandium"],
-        "Ti": ["티타늄", "Titanium"], "V": ["바나듐", "Vanadium"], "Cr": ["크로뮴", "Chromium"],
-        "Mn": ["망가니즈", "Manganese"], "Fe": ["철", "Iron"], "Co": ["코발트", "Cobalt"],
-        "Ni": ["니켈", "Nickel"], "Cu": ["구리", "Copper"], "Zn": ["아연", "Zinc"],
-        "Ga": ["갈륨", "Gallium"], "As": ["비소", "Arsenic"], "Se": ["셀레늄", "Selenium"],
-        "Br": ["브로민", "Bromine"], "Rb": ["루비듐", "Rubidium"], "Sr": ["스트론튬", "Strontium"],
-        "Ag": ["은", "Silver"], "Cd": ["카드뮴", "Cadmium"], "Sn": ["주석", "Tin"],
-        "Sb": ["안티모니", "Antimony"], "Te": ["텔루륨", "Tellurium"], "I": ["아이오딘", "Iodine"],
-        "Cs": ["세슘", "Cesium"], "Ba": ["바륨", "Barium"],
-        "NaBr": ["브로민화 소듐", "Sodium bromide"], "Rb2O": ["산화 루비듐", "Rubidium oxide"],
-        "CaS": ["황화 칼슘", "Calcium sulfide"], "AlI3": ["아이오딘화 알루미늄", "Aluminum iodide"],
-        "SrF2": ["플루오린화 스트론튬", "Strontium fluoride"], "Al2Se3": ["셀레늄화 알루미늄", "Aluminum selenide"],
-        "K3N": ["질소화 포타슘", "Potassium nitride"], "Mg3P2": ["인화 마그네슘", "Magnesium phosphide"],
-        "Hg2O": ["산화 수은(I)", "Mercury(I) oxide"], "FeBr3": ["브로민화 철(III)", "Iron(III) bromide"],
-        "CoS": ["황화 코발트(II)", "Cobalt(II) sulfide"], "TiCl4": ["염화 티타늄(IV)", "Titanium(IV) chloride"],
-        "Sn3N2": ["질소화 주석(II)", "Tin(II) nitride"], "CoI3": ["아이오딘화 코발트(III)", "Cobalt(III) iodide"],
-        "HgO": ["산화 수은(II)", "Mercury(II) oxide"], "Cr2S3": ["황화 크로뮴(III)", "Chromium(III) sulfide"],
-        "CsF": ["플루오린화 세슘", "Cesium fluoride"], "Li3N": ["질소화 리튬", "Lithium nitride"],
-        "Ag2S": ["황화 은", "Silver sulfide"], "MnO2": ["산화 망가니즈(IV)", "Manganese(IV) oxide"],
-        "TiO2": ["산화 티타늄(IV)", "Titanium(IV) oxide"], "Sr3P2": ["인화 스트론튬", "Strontium phosphide"],
-        "ZnCl2": ["염화 아연", "Zinc chloride"], "SnF4": ["플루오린화 주석(IV)", "Tin(IV) fluoride"],
-        "Ca3N2": ["질소화 칼슘", "Calcium nitride"], "Al2S3": ["황화 알루미늄", "Aluminum sulfide"],
-        "Hg2Se": ["셀레늄화 수은(I)", "Mercury(I) selenide"], "AgI": ["아이오딘화 은", "Silver iodide"],
-        "BaSO3": ["아황산 바륨", "Barium sulfite"], "NaNO2": ["아질산 소듐", "Sodium nitrite"],
-        "KMnO4": ["과망가니즈산 포타슘", "Potassium permanganate"], "K2Cr2O7": ["중크로뮴산 포타슘", "Potassium dichromate"],
-        "Cr(OH)3": ["수산화 크로뮴(III)", "Chromium(III) hydroxide"], "Mg(CN)2": ["사이안화 마그네슘", "Magnesium cyanide"],
-        "Pb(CO3)2": ["탄산 납(IV)", "Lead(IV) carbonate"], "NH4C2H3O2": ["아세트산 암모늄", "Ammonium acetate"],
-        "SO2": ["이산화 황", "Sulfur dioxide"], "P2S5": ["오황화 이인", "Diphosphorus pentasulfide"],
-        "As2O3": ["삼산화 이비소", "Diarsenic trioxide"], "AsF5": ["오플루오린화 비소", "Arsenic pentafluoride"],
-        "N2O": ["일산화 이질소", "Dinitrogen monoxide"], "SF6": ["육플루오린화 황", "Sulfur hexafluoride"],
-        "CuI": ["아이오딘화 구리(I)", "Copper(I) iodide"], "CuI2": ["아이오딘화 구리(II)", "Copper(II) iodide"],
-        "S4N4": ["사질소 사황", "Tetrasulfur tetranitride"], "SeCl4": ["사염화 셀레늄", "Selenium tetrachloride"],
-        "Na2CO3": ["탄산 소듐", "Sodium carbonate"], "NaHCO3": ["탄산수소 소듐", "Sodium hydrogen carbonate"],
-        "NaOCl": ["차아염소산 소듐", "Sodium hypochlorite"], "BaCrO4": ["크로뮴산 바륨", "Barium chromate"],
-        "NH4NO3": ["질산 암모늄", "Ammonium nitrate"], "H2SO4": ["황산", "Sulfuric acid"],
-        "HClO": ["차아염소산", "Hypochlorous acid"], "HNO2": ["아질산", "Nitrous acid"],
-        "H3PO4": ["인산", "Phosphoric acid"]
-    }
+#     # 데이터 정의 (생략 없이 유지)
+#     all_chem = {
+#         "H": ["수소", "Hydrogen"], "Li": ["리튬", "Lithium"], "Be": ["베릴륨", "Beryllium"],
+#         "B": ["붕소", "Boron"], "C": ["탄소", "Carbon"], "N": ["질소", "Nitrogen"],
+#         "O": ["산소", "Oxygen"], "F": ["플루오린", "Fluorine"], "Na": ["소듐", "Sodium"],
+#         "Mg": ["마그네슘", "Magnesium"], "Al": ["알루미늄", "Aluminum"], "Si": ["규소", "Silicon"],
+#         "P": ["인", "Phosphorus"], "S": ["황", "Sulfur"], "Cl": ["염소", "Chlorine"],
+#         "K": ["포타슘", "Potassium"], "Ca": ["칼슘", "Calcium"], "Sc": ["스칸듐", "Scandium"],
+#         "Ti": ["티타늄", "Titanium"], "V": ["바나듐", "Vanadium"], "Cr": ["크로뮴", "Chromium"],
+#         "Mn": ["망가니즈", "Manganese"], "Fe": ["철", "Iron"], "Co": ["코발트", "Cobalt"],
+#         "Ni": ["니켈", "Nickel"], "Cu": ["구리", "Copper"], "Zn": ["아연", "Zinc"],
+#         "Ga": ["갈륨", "Gallium"], "As": ["비소", "Arsenic"], "Se": ["셀레늄", "Selenium"],
+#         "Br": ["브로민", "Bromine"], "Rb": ["루비듐", "Rubidium"], "Sr": ["스트론튬", "Strontium"],
+#         "Ag": ["은", "Silver"], "Cd": ["카드뮴", "Cadmium"], "Sn": ["주석", "Tin"],
+#         "Sb": ["안티모니", "Antimony"], "Te": ["텔루륨", "Tellurium"], "I": ["아이오딘", "Iodine"],
+#         "Cs": ["세슘", "Cesium"], "Ba": ["바륨", "Barium"],
+#         "NaBr": ["브로민화 소듐", "Sodium bromide"], "Rb2O": ["산화 루비듐", "Rubidium oxide"],
+#         "CaS": ["황화 칼슘", "Calcium sulfide"], "AlI3": ["아이오딘화 알루미늄", "Aluminum iodide"],
+#         "SrF2": ["플루오린화 스트론튬", "Strontium fluoride"], "Al2Se3": ["셀레늄화 알루미늄", "Aluminum selenide"],
+#         "K3N": ["질소화 포타슘", "Potassium nitride"], "Mg3P2": ["인화 마그네슘", "Magnesium phosphide"],
+#         "Hg2O": ["산화 수은(I)", "Mercury(I) oxide"], "FeBr3": ["브로민화 철(III)", "Iron(III) bromide"],
+#         "CoS": ["황화 코발트(II)", "Cobalt(II) sulfide"], "TiCl4": ["염화 티타늄(IV)", "Titanium(IV) chloride"],
+#         "Sn3N2": ["질소화 주석(II)", "Tin(II) nitride"], "CoI3": ["아이오딘화 코발트(III)", "Cobalt(III) iodide"],
+#         "HgO": ["산화 수은(II)", "Mercury(II) oxide"], "Cr2S3": ["황화 크로뮴(III)", "Chromium(III) sulfide"],
+#         "CsF": ["플루오린화 세슘", "Cesium fluoride"], "Li3N": ["질소화 리튬", "Lithium nitride"],
+#         "Ag2S": ["황화 은", "Silver sulfide"], "MnO2": ["산화 망가니즈(IV)", "Manganese(IV) oxide"],
+#         "TiO2": ["산화 티타늄(IV)", "Titanium(IV) oxide"], "Sr3P2": ["인화 스트론튬", "Strontium phosphide"],
+#         "ZnCl2": ["염화 아연", "Zinc chloride"], "SnF4": ["플루오린화 주석(IV)", "Tin(IV) fluoride"],
+#         "Ca3N2": ["질소화 칼슘", "Calcium nitride"], "Al2S3": ["황화 알루미늄", "Aluminum sulfide"],
+#         "Hg2Se": ["셀레늄화 수은(I)", "Mercury(I) selenide"], "AgI": ["아이오딘화 은", "Silver iodide"],
+#         "BaSO3": ["아황산 바륨", "Barium sulfite"], "NaNO2": ["아질산 소듐", "Sodium nitrite"],
+#         "KMnO4": ["과망가니즈산 포타슘", "Potassium permanganate"], "K2Cr2O7": ["중크로뮴산 포타슘", "Potassium dichromate"],
+#         "Cr(OH)3": ["수산화 크로뮴(III)", "Chromium(III) hydroxide"], "Mg(CN)2": ["사이안화 마그네슘", "Magnesium cyanide"],
+#         "Pb(CO3)2": ["탄산 납(IV)", "Lead(IV) carbonate"], "NH4C2H3O2": ["아세트산 암모늄", "Ammonium acetate"],
+#         "SO2": ["이산화 황", "Sulfur dioxide"], "P2S5": ["오황화 이인", "Diphosphorus pentasulfide"],
+#         "As2O3": ["삼산화 이비소", "Diarsenic trioxide"], "AsF5": ["오플루오린화 비소", "Arsenic pentafluoride"],
+#         "N2O": ["일산화 이질소", "Dinitrogen monoxide"], "SF6": ["육플루오린화 황", "Sulfur hexafluoride"],
+#         "CuI": ["아이오딘화 구리(I)", "Copper(I) iodide"], "CuI2": ["아이오딘화 구리(II)", "Copper(II) iodide"],
+#         "S4N4": ["사질소 사황", "Tetrasulfur tetranitride"], "SeCl4": ["사염화 셀레늄", "Selenium tetrachloride"],
+#         "Na2CO3": ["탄산 소듐", "Sodium carbonate"], "NaHCO3": ["탄산수소 소듐", "Sodium hydrogen carbonate"],
+#         "NaOCl": ["차아염소산 소듐", "Sodium hypochlorite"], "BaCrO4": ["크로뮴산 바륨", "Barium chromate"],
+#         "NH4NO3": ["질산 암모늄", "Ammonium nitrate"], "H2SO4": ["황산", "Sulfuric acid"],
+#         "HClO": ["차아염소산", "Hypochlorous acid"], "HNO2": ["아질산", "Nitrous acid"],
+#         "H3PO4": ["인산", "Phosphoric acid"]
+#     }
     
-    mode = st.radio("정답 언어 선택", ["한글명", "영어명"], horizontal=True)
-    ans_idx = 0 if mode == "한글명" else 1
+#     mode = st.radio("정답 언어 선택", ["한글명", "영어명"], horizontal=True)
+#     ans_idx = 0 if mode == "한글명" else 1
     
-    # [상태 관리 초기화]
-    if 'chem_q_list' not in st.session_state:
-        all_keys = list(all_chem.keys())
-        random.shuffle(all_keys)
-        st.session_state.chem_q_list = all_keys
-        st.session_state.chem_idx = 0
+#     # [상태 관리 초기화]
+#     if 'chem_q_list' not in st.session_state:
+#         all_keys = list(all_chem.keys())
+#         random.shuffle(all_keys)
+#         st.session_state.chem_q_list = all_keys
+#         st.session_state.chem_idx = 0
 
-    if st.session_state.chem_idx >= len(st.session_state.chem_q_list):
-        st.success("모든 문제를 풀었습니다! 순서를 다시 섞습니다.")
-        random.shuffle(st.session_state.chem_q_list)
-        st.session_state.chem_idx = 0
+#     if st.session_state.chem_idx >= len(st.session_state.chem_q_list):
+#         st.success("모든 문제를 풀었습니다! 순서를 다시 섞습니다.")
+#         random.shuffle(st.session_state.chem_q_list)
+#         st.session_state.chem_idx = 0
 
-    q_formula = st.session_state.chem_q_list[st.session_state.chem_idx]
-    correct_name = all_chem[q_formula][ans_idx]
+#     q_formula = st.session_state.chem_q_list[st.session_state.chem_idx]
+#     correct_name = all_chem[q_formula][ans_idx]
 
-    # --- [엔터 자동 채점 함수] ---
-    def check_chem_ans():
-        user_val = st.session_state[f"chem_input_{st.session_state.chem_idx}"]
-        clean_user = user_val.strip().replace(" ", "").lower()
-        clean_correct = correct_name.strip().replace(" ", "").lower()
+#     # --- [엔터 자동 채점 함수] ---
+#     def check_chem_ans():
+#         user_val = st.session_state[f"chem_input_{st.session_state.chem_idx}"]
+#         clean_user = user_val.strip().replace(" ", "").lower()
+#         clean_correct = correct_name.strip().replace(" ", "").lower()
         
-        if clean_user == clean_correct:
-            st.session_state.chem_feedback = ("success", f"정답입니다! : {correct_name}")
-        else:
-            st.session_state.chem_feedback = ("error", f"오답입니다. 정답은: {correct_name}")
-            # 오답 노트 기록
-            new_wrong = {"category": f"🧪 화학 명명법 ({mode})", "question": q_formula, "answer": correct_name}
-            if 'wrong_answers' not in st.session_state:
-                st.session_state.wrong_answers = []
-            if new_wrong not in st.session_state.wrong_answers:
-                st.session_state.wrong_answers.append(new_wrong)
+#         if clean_user == clean_correct:
+#             st.session_state.chem_feedback = ("success", f"정답입니다! : {correct_name}")
+#         else:
+#             st.session_state.chem_feedback = ("error", f"오답입니다. 정답은: {correct_name}")
+#             # 오답 노트 기록
+#             new_wrong = {"category": f"🧪 화학 명명법 ({mode})", "question": q_formula, "answer": correct_name}
+#             if 'wrong_answers' not in st.session_state:
+#                 st.session_state.wrong_answers = []
+#             if new_wrong not in st.session_state.wrong_answers:
+#                 st.session_state.wrong_answers.append(new_wrong)
 
-    st.subheader(f"문제 {st.session_state.chem_idx + 1}: [{q_formula}]")
+#     st.subheader(f"문제 {st.session_state.chem_idx + 1}: [{q_formula}]")
     
-    # 입력창 (on_change 적용)
-    user_ans = st.text_input(
-        "이름을 입력하세요 (엔터키 가능)", 
-        key=f"chem_input_{st.session_state.chem_idx}", 
-        on_change=check_chem_ans
-    )
+#     # 입력창 (on_change 적용)
+#     user_ans = st.text_input(
+#         "이름을 입력하세요 (엔터키 가능)", 
+#         key=f"chem_input_{st.session_state.chem_idx}", 
+#         on_change=check_chem_ans
+#     )
     
-    # 피드백 표시
-    if 'chem_feedback' in st.session_state:
-        status, msg = st.session_state.chem_feedback
-        if status == "success":
-            st.success(msg)
-        else:
-            st.error(msg)
+#     # 피드백 표시
+#     if 'chem_feedback' in st.session_state:
+#         status, msg = st.session_state.chem_feedback
+#         if status == "success":
+#             st.success(msg)
+#         else:
+#             st.error(msg)
 
-    col1, col2 = st.columns(2)
-    with col1:
-        # 버튼으로도 채점 가능하도록 유지
-        if st.button("정답 확인"):
-            check_chem_ans()
-            st.rerun()
+#     col1, col2 = st.columns(2)
+#     with col1:
+#         # 버튼으로도 채점 가능하도록 유지
+#         if st.button("정답 확인"):
+#             check_chem_ans()
+#             st.rerun()
             
-    with col2:
-        if st.button("다음 문제"):
-            st.session_state.chem_idx += 1
-            if 'chem_feedback' in st.session_state:
-                del st.session_state.chem_feedback
-            st.rerun()
+#     with col2:
+#         if st.button("다음 문제"):
+#             st.session_state.chem_idx += 1
+#             if 'chem_feedback' in st.session_state:
+#                 del st.session_state.chem_feedback
+#             st.rerun()
 
-elif menu == "🔭 망원경 구조":
-    st.header("🔭 망원경 구조 명칭 맞추기")
+# elif menu == "🔭 망원경 구조":
+#     st.header("🔭 망원경 구조 명칭 맞추기")
 
-    # 1. 데이터 정의
-    telescope_data = {
-        "가. 경통 (굴절 망원경)": {
-            "1": "후드", "2": "렌즈셀", "3": "경통밴드", "4": "경통플레이트",
-            "5": "파인더", "6": "파인더정렬나사", "7": "파인더브라켓", "8": "파인더고정나사",
-            "9": "초점조절나사", "10": "초점고정나사", "11": "접안부고정나사", "12": "접안렌즈", "13": "직각프리즘"
-        },
-        "나. 가대 (적도의식)": {
-            "1": "경통플레이트고정나사", "2": "적위축고정클램프", "3": "적위축수동클러치", "4": "적위미동나사",
-            "5": "적경축수동클러치", "6": "무게추", "8": "적경축미동나사", "9": "고도조절나사",
-            "11": "경통플레이트안전나사", "16": "무게추봉", "17": "무게추잠금나사", "18": "무게추안전나사"
-        }
-    }
+#     # 1. 데이터 정의
+#     telescope_data = {
+#         "가. 경통 (굴절 망원경)": {
+#             "1": "후드", "2": "렌즈셀", "3": "경통밴드", "4": "경통플레이트",
+#             "5": "파인더", "6": "파인더정렬나사", "7": "파인더브라켓", "8": "파인더고정나사",
+#             "9": "초점조절나사", "10": "초점고정나사", "11": "접안부고정나사", "12": "접안렌즈", "13": "직각프리즘"
+#         },
+#         "나. 가대 (적도의식)": {
+#             "1": "경통플레이트고정나사", "2": "적위축고정클램프", "3": "적위축수동클러치", "4": "적위미동나사",
+#             "5": "적경축수동클러치", "6": "무게추", "8": "적경축미동나사", "9": "고도조절나사",
+#             "11": "경통플레이트안전나사", "16": "무게추봉", "17": "무게추잠금나사", "18": "무게추안전나사"
+#         }
+#     }
     
-    cat = st.selectbox("영역 선택", list(telescope_data.keys()))
-    parts = telescope_data[cat]
+#     cat = st.selectbox("영역 선택", list(telescope_data.keys()))
+#     parts = telescope_data[cat]
 
-    # 2. 세션 초기화
-    if 'tele_solved_dict' not in st.session_state:
-        st.session_state.tele_solved_dict = {c: [] for c in telescope_data.keys()}
+#     # 2. 세션 초기화
+#     if 'tele_solved_dict' not in st.session_state:
+#         st.session_state.tele_solved_dict = {c: [] for c in telescope_data.keys()}
 
-    # 3. 문제 추출 로직
-    solved_list = st.session_state.tele_solved_dict[cat]
-    remaining = [p for p in parts.keys() if p not in solved_list]
+#     # 3. 문제 추출 로직
+#     solved_list = st.session_state.tele_solved_dict[cat]
+#     remaining = [p for p in parts.keys() if p not in solved_list]
 
-    if not remaining:
-        st.success(f"🎉 {cat}의 모든 문제를 풀었습니다! 다시 시작합니다.")
-        st.session_state.tele_solved_dict[cat] = []
-        remaining = list(parts.keys())
+#     if not remaining:
+#         st.success(f"🎉 {cat}의 모든 문제를 풀었습니다! 다시 시작합니다.")
+#         st.session_state.tele_solved_dict[cat] = []
+#         remaining = list(parts.keys())
 
-    # 문제나 카테고리가 바뀌면 피드백 삭제
-    if 'current_tele_q' not in st.session_state or st.session_state.get('last_cat') != cat:
-        st.session_state.current_tele_q = random.choice(remaining)
-        st.session_state.last_cat = cat
-        if 'tele_feedback' in st.session_state:
-            del st.session_state.tele_feedback
+#     # 문제나 카테고리가 바뀌면 피드백 삭제
+#     if 'current_tele_q' not in st.session_state or st.session_state.get('last_cat') != cat:
+#         st.session_state.current_tele_q = random.choice(remaining)
+#         st.session_state.last_cat = cat
+#         if 'tele_feedback' in st.session_state:
+#             del st.session_state.tele_feedback
 
-    q_num = st.session_state.current_tele_q
-    correct_name = parts[q_num]
+#     q_num = st.session_state.current_tele_q
+#     correct_name = parts[q_num]
 
-    # --- [엔터 자동 채점 함수] ---
-    def check_tele_ans():
-        # 사용자가 입력한 값 가져오기
-        user_val = st.session_state[f"input_{cat}_{q_num}"].strip()
+#     # --- [엔터 자동 채점 함수] ---
+#     def check_tele_ans():
+#         # 사용자가 입력한 값 가져오기
+#         user_val = st.session_state[f"input_{cat}_{q_num}"].strip()
         
-        if user_val == correct_name:
-            st.session_state.tele_feedback = ("success", f"✅ 정답입니다! ({correct_name})")
-        else:
-            st.session_state.tele_feedback = ("error", f"❌ 틀렸습니다. 정답은 [{correct_name}]입니다.")
-            # 오답 노트 기록
-            new_wrong = {
-                "category": f"🔭 망원경 구조 ({cat})", 
-                "question": f"{q_num}번 부품", 
-                "answer": correct_name
-            }
-            if 'wrong_answers' not in st.session_state:
-                st.session_state.wrong_answers = []
-            if new_wrong not in st.session_state.wrong_answers:
-                st.session_state.wrong_answers.append(new_wrong)
+#         if user_val == correct_name:
+#             st.session_state.tele_feedback = ("success", f"✅ 정답입니다! ({correct_name})")
+#         else:
+#             st.session_state.tele_feedback = ("error", f"❌ 틀렸습니다. 정답은 [{correct_name}]입니다.")
+#             # 오답 노트 기록
+#             new_wrong = {
+#                 "category": f"🔭 망원경 구조 ({cat})", 
+#                 "question": f"{q_num}번 부품", 
+#                 "answer": correct_name
+#             }
+#             if 'wrong_answers' not in st.session_state:
+#                 st.session_state.wrong_answers = []
+#             if new_wrong not in st.session_state.wrong_answers:
+#                 st.session_state.wrong_answers.append(new_wrong)
 
-    # 4. 퀴즈 UI
-    st.info(f"질문: {cat} - **[{q_num}번]** 부품 이름은?")
+#     # 4. 퀴즈 UI
+#     st.info(f"질문: {cat} - **[{q_num}번]** 부품 이름은?")
     
-    # 텍스트 입력 (on_change 추가)
-    st.text_input(
-        "부품 이름 입력 (엔터 가능):", 
-        key=f"input_{cat}_{q_num}",
-        on_change=check_tele_ans
-    )
+#     # 텍스트 입력 (on_change 추가)
+#     st.text_input(
+#         "부품 이름 입력 (엔터 가능):", 
+#         key=f"input_{cat}_{q_num}",
+#         on_change=check_tele_ans
+#     )
     
-    # 채점 결과 표시
-    if 'tele_feedback' in st.session_state:
-        status, msg = st.session_state.tele_feedback
-        if status == "success":
-            st.success(msg)
-        else:
-            st.error(msg)
+#     # 채점 결과 표시
+#     if 'tele_feedback' in st.session_state:
+#         status, msg = st.session_state.tele_feedback
+#         if status == "success":
+#             st.success(msg)
+#         else:
+#             st.error(msg)
 
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("정답 확인"):
-            check_tele_ans()
-            st.rerun()
+#     col1, col2 = st.columns(2)
+#     with col1:
+#         if st.button("정답 확인"):
+#             check_tele_ans()
+#             st.rerun()
 
-    with col2:
-        if st.button("다른 번호 풀기 (다음 문제)"):
-            # 현재 문제를 '푼 목록'에 저장
-            st.session_state.tele_solved_dict[cat].append(q_num)
-            # 현재 문제 정보 및 피드백 삭제
-            if 'current_tele_q' in st.session_state:
-                del st.session_state.current_tele_q
-            if 'tele_feedback' in st.session_state:
-                del st.session_state.tele_feedback
-            st.rerun()
+#     with col2:
+#         if st.button("다른 번호 풀기 (다음 문제)"):
+#             # 현재 문제를 '푼 목록'에 저장
+#             st.session_state.tele_solved_dict[cat].append(q_num)
+#             # 현재 문제 정보 및 피드백 삭제
+#             if 'current_tele_q' in st.session_state:
+#                 del st.session_state.current_tele_q
+#             if 'tele_feedback' in st.session_state:
+#                 del st.session_state.tele_feedback
+#             st.rerun()
 
-elif menu == "🔭 망원경 운용 퀴즈":
-    st.header("🔭 망원경 설치 및 운용 4지선다")
+# elif menu == "🔭 망원경 운용 퀴즈":
+#     st.header("🔭 망원경 설치 및 운용 4지선다")
     
-    quiz_bank = {
-        "설치법": [
-            {"question": "삼각대 설치 시 방위지침봉의 'N' 자는 어느 방향을 향해야 하는가?", "options": ["동쪽", "서쪽", "남쪽", "북쪽"], "answer": 3, "explan": "북극성 방향인 북쪽을 향해야 적도식 가대가 정상 작동합니다."},
-            {"question": "가대를 삼각대에 올린 후 가장 먼저 해야 할 일은?", "options": ["경통 끼우기", "아래쪽 고정 나사 돌려 고정", "무게추 달기", "전원 켜기"], "answer": 1, "explan": "가대가 추락하지 않도록 아래쪽 고정 나사를 조여 삼각대와 합체시켜야 합니다."},
-            {"question": "설치 순서 중 가장 먼저 선행되어야 하는 것은?", "options": ["가대 조립", "경통 설치", "평평하고 단단한 바닥에 삼각대 설치", "무게추 달기"], "answer": 2, "explan": "모든 설치의 기본은 평평하고 단단한 지면 확보입니다."},
-            {"question": "무게추 설치 시 가장 주의해야 할 점은?", "options": ["색깔 맞추기", "안전 나사를 반드시 잠그기", "최대한 위로 올리기", "두 개를 동시에 끼우기"], "answer": 1, "explan": "무게추가 발등으로 떨어지는 사고를 막기 위해 안전 나사 체결은 필수입니다."},
-            {"question": "액세서리 선반의 역할은?", "options": ["장식용", "삼각대 다리 지지 및 부품 거치", "망원경 수평 맞추기", "무게 중심 잡기"], "answer": 1, "explan": "다리의 벌어짐을 방지하여 지지력을 높이고 아이피스 등을 보관합니다."},
-            {"question": "경통을 가대에 부착할 때 사용하는 부품은?", "options": ["무게추 봉", "경통 플레이트와 고정나사", "파인더", "천정 미러"], "answer": 1, "explan": "경통 하단의 플레이트를 가대의 홈에 맞춰 끼우고 나사로 고정합니다."},
-            {"question": "설치 시 '역순으로 분리해야 함'이라고 명시된 단계는?", "options": ["삼각대 설치", "경통 및 가대 해체", "파인더 정렬", "초점 맞추기"], "answer": 1, "explan": "설치의 반대 순서로 안전하게 해체해야 장비 파손을 막을 수 있습니다."},
-            {"question": "가대 설치 후 경통을 올리기 전 상태는?", "options": ["클램프를 꽉 잠근 상태", "무게추가 이미 달린 상태", "전원이 켜진 상태", "파인더가 조립된 상태"], "answer": 1, "explan": "안전을 위해 경통보다 무게추가 먼저 설치되어 있어야 합니다."},
-            {"question": "삼각대 다리 길이를 조절하는 이유는?", "options": ["높게 보기 위해", "수평을 맞추기 위해", "배율을 높이기 위해", "가볍게 하기 위해"], "answer": 1, "explan": "지면이 고르지 않을 때 다리 길이로 수평을 잡습니다."},
-            {"question": "경통 설치 시 '도브테일 홈'에 끼운 뒤 무엇을 확인해야 하는가?", "options": ["렌즈의 색깔", "고정 나사가 완전히 조여졌는지", "바람의 방향", "현재 시간"], "answer": 1, "explan": "경통이 미끄러져 떨어지지 않도록 고정 나사 체결 확인이 제일 중요합니다."},
-        ],
-        "균형 맞추기": [
-            {"question": "적경축(1차) 균형을 잡을 때 수평으로 놓아야 하는 것은?", "options": ["경통", "무게추 봉", "삼각대 다리", "파인더"], "answer": 1, "explan": "무게추 봉을 지면과 수평으로 두고 무게추 위치를 조절합니다."},
-            {"question": "적위축(2차) 균형을 잡을 때 이동시켜야 하는 것은?", "options": ["무게추", "경통 자체의 위치", "삼각대 위치", "접안렌즈 종류"], "answer": 1, "explan": "경통 플레이트를 앞뒤로 밀어 경통 자체의 무게 중심을 잡습니다."},
-            {"question": "무게추 쪽이 무거워 아래로 처진다면 어떻게 해야 하는가?", "options": ["무게추를 가대 쪽으로 올린다", "무게추를 봉 끝으로 내린다", "경통을 뒤로 민다", "경통을 앞으로 민다"], "answer": 0, "explan": "무거운 쪽의 모멘트를 줄이기 위해 무게추를 회전축(가대) 쪽으로 가깝게 이동시킵니다."},
-            {"question": "대물렌즈 쪽이 무거워 앞으로 쏠릴 때 조치 방법은?", "options": ["무게추를 내린다", "경통을 뒤(접안부 쪽)로 민다", "경통을 앞으로 민다", "클램프를 더 꽉 잠근다"], "answer": 1, "explan": "경통 전체를 뒤로 이동시켜 중심을 맞춥니다."},
-            {"question": "균형을 맞출 때 클램프(잠금장치)의 상태는?", "options": ["꽉 잠근 상태", "풀어서 자유롭게 움직이는 상태", "반만 잠근 상태", "제거한 상태"], "answer": 1, "explan": "어느 쪽으로 기우는지 확인해야 하므로 클램프를 풀어야 합니다."},
-            {"question": "균형 잡기 전 반드시 장착 완료해야 하는 것은?", "options": ["전원 케이블", "관측에 사용할 모든 액세서리(아이피스 등)", "망원경 덮개", "노트북"], "answer": 1, "explan": "실제 관측 무게와 동일한 상태에서 균형을 잡아야 정확합니다."},
-            {"question": "적경축 균형이 완벽하다는 것은 어떤 상태인가?", "options": ["무게추가 바닥에 닿은 상태", "손을 놓아도 수평을 유지하는 상태", "클램프가 부러진 상태", "무게추를 뺀 상태"], "answer": 1, "explan": "어느 쪽으로도 기울지 않고 정지해 있어야 균형이 맞는 것입니다."},
-            {"question": "적위축 균형을 잡기 위해 경통을 움직일 때 주의할 점은?", "options": ["경통을 손으로 꼭 잡고 이동", "최대한 빠르게 이동", "렌즈를 만지며 이동", "무게추를 빼고 이동"], "answer": 0, "explan": "클램프를 푼 상태에서 경통이 갑자기 돌아가 부딪힐 수 있으므로 꼭 붙잡아야 합니다."},
-            {"question": "균형 확인 시 '적경'과 '적위' 중 무엇을 먼저 하는 것이 일반적인가?", "options": ["적경(1차)", "적위(2차)", "상관없음", "동시에 수행"], "answer": 0, "explan": "보통 무게추 봉을 이용한 적경축 균형을 먼저 잡습니다."},
-            {"question": "균형이 잘 맞으면 클램프를 살짝만 조여도 망원경이 고정되는가?", "options": ["네", "아니오", "알 수 없음", "무게추에 따라 다름"], "answer": 0, "explan": "균형이 맞으면 작은 힘으로도 장비를 안정적으로 고정하고 움직일 수 있습니다."},
-        ],
-        "파인더 정렬": [
-            {"question": "파인더 정렬의 가장 큰 목적은?", "options": ["배율 확대", "주망원경과 파인더의 시야 일치", "망원경 청소", "사진 촬영"], "answer": 1, "explan": "파인더 십자선 중앙에 있는 물체가 주망원경 중앙에도 보이게 하기 위함입니다."},
-            {"question": "파인더 정렬 시 추천하는 목표물은?", "options": ["빨리 지나가는 비행기", "멀리 있는 고정된 지상물(안테나 등)", "떠다니는 구름", "근처의 나무 잎사귀"], "answer": 1, "explan": "움직이지 않는 먼 목표물(500m 이상)이 정렬에 적합합니다."},
-            {"question": "파인더 정렬 시 주망원경의 아이피스는 어떤 것이 좋은가?", "options": ["고배율", "저배율(시야가 넓은 것)", "아이피스 없음", "카메라 연결"], "answer": 1, "explan": "대상을 찾기 쉬운 저배율 아이피스로 먼저 중앙을 잡습니다."},
-            {"question": "파인더 경통 주변에 있는 3개의 작은 나사의 용도는?", "options": ["파인더 분해용", "파인더 정렬(방향 조절)용", "초점 조절용", "디자인"], "answer": 1, "explan": "나사들을 조금씩 조이고 풀면서 파인더의 조준 방향을 미세하게 바꿉니다."},
-            {"question": "정렬 순서로 옳은 것은?", "options": ["파인더 먼저 보고 주망원경 맞추기", "주망원경으로 중앙 잡고 파인더 맞추기", "동시에 보기", "렌즈 닦기 먼저 하기"], "answer": 1, "explan": "기준이 되는 주망원경 시야 중앙에 물체를 먼저 두고 파인더를 그에 맞춥니다."},
-            {"question": "파인더 정렬은 언제 하는 것이 가장 효율적인가?", "options": ["한밤중", "밝은 낮 또는 해질녘", "비오는 날", "상관없음"], "answer": 1, "explan": "밝을 때 지상 물체를 보고 미리 정렬해두어야 밤에 별을 찾기 쉽습니다."},
-            {"question": "파인더 내부의 십자선 모양은 보통 어떤 형태인가?", "options": ["원형", "십자(+) 모양", "삼각형", "없음"], "answer": 1, "explan": "정확한 중심을 가리키기 위해 십자선이 그려져 있습니다."},
-            {"question": "파인더의 상이 흐리다면 어디를 돌려야 하는가?", "options": ["가대 나사", "파인더의 접안부 쪽(초점 조절부)", "주망원경 포커서", "무게추"], "answer": 1, "explan": "파인더 자체에도 별도의 초점 조절 기능이 있습니다."},
-            {"question": "정렬 끝난 후 최종 확인 방법은?", "options": ["눈을 감아본다", "두 망원경 중앙에 같은 물체가 있는지 확인", "망원경을 흔들어본다", "무게추를 옮겨본다"], "answer": 1, "explan": "주망원경과 파인더가 동일한 지점을 가리키는지 더블 체크합니다."},
-            {"question": "파인더 정렬을 건너뛰면 발생하는 문제는?", "options": ["상이 어두워짐", "원하는 별을 찾기가 매우 힘들어짐", "배율이 낮아짐", "망원경이 쓰러짐"], "answer": 1, "explan": "시야가 좁은 주망원경만으로는 작은 별을 찾기가 거의 불가능합니다."},
-        ],
-        "초점 맞추기": [
-            {"question": "초점을 맞출 때 돌리는 손잡이의 명칭은?", "options": ["클램프", "초점 조절 나사(Focus Knob)", "위도 나사", "방위 나사"], "answer": 1, "explan": "포커서 옆의 둥근 나사를 돌려 상을 뚜렷하게 만듭니다."},
-            {"question": "초점이 맞지 않았을 때 별의 모습은?", "options": ["작고 날카로운 점", "크고 흐릿한 도넛이나 원형", "보이지 않음", "빨간색으로 보임"], "answer": 1, "explan": "초점이 맞지 않으면 빛이 퍼져서 흐릿한 원형으로 보입니다."},
-            {"question": "초점 조절 시 가장 주의해야 할 사항은?", "options": ["최대한 빨리 돌리기", "천천히 돌리며 상의 변화 관찰", "힘껏 조이기", "아이피스 빼고 돌리기"], "answer": 1, "explan": "초점 구간을 지나치지 않도록 아주 천천히 조절해야 합니다."},
-            {"question": "아이피스를 교체할 때마다 초점을 다시 잡아야 하는가?", "options": ["네", "아니오", "망원경마다 다름", "낮에만 해당"], "answer": 0, "explan": "렌즈마다 초점이 맺히는 위치가 다르므로 교체 시마다 미세 조정이 필요합니다."},
-            {"question": "초점이 가장 잘 맞은 상태는?", "options": ["별이 가장 크게 보일 때", "별이 가장 작고 뚜렷한 점으로 보일 때", "상이 겹쳐 보일 때", "무지개색이 보일 때"], "answer": 1, "explan": "별이 가장 작은 점으로 응축되었을 때가 정초점 상태입니다."},
-            {"question": "초점 나사를 돌려도 상이 계속 흐리다면 확인해야 할 것은?", "options": ["천정 미러 장착 여부", "관측자의 시력", "렌즈 캡 제거 여부", "전부 다"], "answer": 3, "explan": "기본적인 조립 상태와 캡 제거 여부를 먼저 확인해야 합니다."},
-            {"question": "굴절 망원경에서 초점 조절은 무엇을 이동시키는가?", "options": ["대물렌즈", "접안부(아이피스)의 위치", "삼각대", "가대"], "answer": 1, "explan": "접안부의 길이를 변화시켜 상이 맺히는 위치를 맞춥니다."},
-            {"question": "안경 쓴 사용자가 관측할 때 초점은 어떻게 맞추는가?", "options": ["안경 쓴 채로 그대로 둠", "자신의 시력에 맞게 초점 나사 재조절", "초점을 맞출 수 없음", "안경을 벗고 봐도 똑같음"], "answer": 1, "explan": "망원경 초점 나사가 시력 보정 역할을 하므로 본인 눈에 맞게 돌리면 됩니다."},
-            {"question": "초점 조절 나사가 헛돈다면?", "options": ["나사가 부러진 것", "포커서 고정 나사가 잠겨 있는지 확인", "기름칠 하기", "망원경 교체"], "answer": 1, "explan": "포커서 하단에 이동 방지 고정 나사가 잠겨 있으면 조절 나사가 움직이지 않습니다."},
-            {"question": "사진 촬영 시 초점 맞추기는 안구 관측보다?", "options": ["더 쉽다", "훨씬 정밀하고 어렵다", "똑같다", "할 필요 없다"], "answer": 1, "explan": "사진은 미세한 핀트 어긋남이 크게 나타나므로 훨씬 정밀해야 합니다."},
-        ],
-        "균형 맞추기가 필요한 이유": [
-            {"question": "균형이 안 맞은 상태로 모터를 돌리면 생기는 문제는?", "options": ["배터리가 오래 감", "모터와 기어에 과부하 및 파손 위험", "별이 더 빨리 보임", "망원경이 가벼워짐"], "answer": 1, "explan": "한쪽으로 쏠린 무게를 억지로 돌리다 보면 정밀 기어에 무리가 갑니다."},
-            {"question": "균형 잡기는 관측의 어떤 성능에 영향을 주는가?", "options": ["렌즈의 밝기", "정밀한 천체 추적(Tracking) 성능", "망원경의 배율", "관측지의 날씨"], "answer": 1, "explan": "무게 중심이 잘 맞아야 별을 따라가는 추적 장치가 부드럽게 작동합니다."},
-            {"question": "클램프를 풀었을 때 경통이 휙 돌아가면 위험한 이유는?", "options": ["바람이 불어서", "사용자 부상 및 장비 충돌 파손", "별이 도망가서", "소음 발생"], "answer": 1, "explan": "무거운 경통이 삼각대 등에 부딪히면 렌즈나 가대가 크게 파손될 수 있습니다."},
-            {"question": "균형이 잘 잡힌 망원경의 장점은?", "options": ["부드러운 조작감", "장비 수명 연장", "진동의 빠른 감쇠", "전부 다"], "answer": 3, "explan": "안전, 성능, 수명 모든 면에서 필수적입니다."},
-            {"question": "장시간 사진 노출 촬영 시 균형이 중요한 이유는?", "options": ["필름 값을 아끼려고", "미세한 흔들림(가이드 오차) 방지", "배경을 검게 하려고", "카메라 배터리 절약"], "answer": 1, "explan": "균형이 안 맞으면 추적 속도가 미세하게 일정하지 않아 별이 흐르게 찍힙니다."},
-            {"question": "균형을 맞추지 않아도 되는 망원경은?", "options": ["매우 비싼 망원경", "작은 장난감 망원경", "없음(모든 천체 망원경은 균형이 중요)", "낮에 보는 망원경"], "answer": 2, "explan": "어떤 망원경이든 정밀 관측 장비라면 무게 균형은 기본입니다."},
-            {"question": "사용자의 안전과 가장 직결된 이유는?", "options": ["눈이 아플까 봐", "고정 나사 해제 시 급격한 회전 방지", "망원경이 무거워서", "추워서"], "answer": 1, "explan": "갑작스러운 회전으로 인한 손가락 끼임이나 장비 추락을 막아줍니다."},
-            {"question": "매뉴얼에서 강조하는 균형의 핵심 키워드는?", "options": ["디자인", "안전과 정밀도", "속도", "색상"], "answer": 1, "explan": "장비 보호(안전)와 관측 품질(정밀도)이 핵심입니다."},
-            {"question": "균형이 맞으면 모터 소음은?", "options": ["커진다", "조용하고 부드러워진다", "변화 없다", "끊겨서 들린다"], "answer": 1, "explan": "부하가 적어지므로 모터 구동음이 일정하고 조용해집니다."},
-            {"question": "균형 잡기를 귀찮아서 건너뛰면?", "options": ["전문가처럼 보임", "장비 고장의 원인이 됨", "별이 더 잘 보임", "시간이 절약됨"], "answer": 1, "explan": "결국 기계적 결함으로 이어져 더 큰 비용과 시간을 낭비하게 됩니다."},
-        ]
-    }
+#     quiz_bank = {
+#         "설치법": [
+#             {"question": "삼각대 설치 시 방위지침봉의 'N' 자는 어느 방향을 향해야 하는가?", "options": ["동쪽", "서쪽", "남쪽", "북쪽"], "answer": 3, "explan": "북극성 방향인 북쪽을 향해야 적도식 가대가 정상 작동합니다."},
+#             {"question": "가대를 삼각대에 올린 후 가장 먼저 해야 할 일은?", "options": ["경통 끼우기", "아래쪽 고정 나사 돌려 고정", "무게추 달기", "전원 켜기"], "answer": 1, "explan": "가대가 추락하지 않도록 아래쪽 고정 나사를 조여 삼각대와 합체시켜야 합니다."},
+#             {"question": "설치 순서 중 가장 먼저 선행되어야 하는 것은?", "options": ["가대 조립", "경통 설치", "평평하고 단단한 바닥에 삼각대 설치", "무게추 달기"], "answer": 2, "explan": "모든 설치의 기본은 평평하고 단단한 지면 확보입니다."},
+#             {"question": "무게추 설치 시 가장 주의해야 할 점은?", "options": ["색깔 맞추기", "안전 나사를 반드시 잠그기", "최대한 위로 올리기", "두 개를 동시에 끼우기"], "answer": 1, "explan": "무게추가 발등으로 떨어지는 사고를 막기 위해 안전 나사 체결은 필수입니다."},
+#             {"question": "액세서리 선반의 역할은?", "options": ["장식용", "삼각대 다리 지지 및 부품 거치", "망원경 수평 맞추기", "무게 중심 잡기"], "answer": 1, "explan": "다리의 벌어짐을 방지하여 지지력을 높이고 아이피스 등을 보관합니다."},
+#             {"question": "경통을 가대에 부착할 때 사용하는 부품은?", "options": ["무게추 봉", "경통 플레이트와 고정나사", "파인더", "천정 미러"], "answer": 1, "explan": "경통 하단의 플레이트를 가대의 홈에 맞춰 끼우고 나사로 고정합니다."},
+#             {"question": "설치 시 '역순으로 분리해야 함'이라고 명시된 단계는?", "options": ["삼각대 설치", "경통 및 가대 해체", "파인더 정렬", "초점 맞추기"], "answer": 1, "explan": "설치의 반대 순서로 안전하게 해체해야 장비 파손을 막을 수 있습니다."},
+#             {"question": "가대 설치 후 경통을 올리기 전 상태는?", "options": ["클램프를 꽉 잠근 상태", "무게추가 이미 달린 상태", "전원이 켜진 상태", "파인더가 조립된 상태"], "answer": 1, "explan": "안전을 위해 경통보다 무게추가 먼저 설치되어 있어야 합니다."},
+#             {"question": "삼각대 다리 길이를 조절하는 이유는?", "options": ["높게 보기 위해", "수평을 맞추기 위해", "배율을 높이기 위해", "가볍게 하기 위해"], "answer": 1, "explan": "지면이 고르지 않을 때 다리 길이로 수평을 잡습니다."},
+#             {"question": "경통 설치 시 '도브테일 홈'에 끼운 뒤 무엇을 확인해야 하는가?", "options": ["렌즈의 색깔", "고정 나사가 완전히 조여졌는지", "바람의 방향", "현재 시간"], "answer": 1, "explan": "경통이 미끄러져 떨어지지 않도록 고정 나사 체결 확인이 제일 중요합니다."},
+#         ],
+#         "균형 맞추기": [
+#             {"question": "적경축(1차) 균형을 잡을 때 수평으로 놓아야 하는 것은?", "options": ["경통", "무게추 봉", "삼각대 다리", "파인더"], "answer": 1, "explan": "무게추 봉을 지면과 수평으로 두고 무게추 위치를 조절합니다."},
+#             {"question": "적위축(2차) 균형을 잡을 때 이동시켜야 하는 것은?", "options": ["무게추", "경통 자체의 위치", "삼각대 위치", "접안렌즈 종류"], "answer": 1, "explan": "경통 플레이트를 앞뒤로 밀어 경통 자체의 무게 중심을 잡습니다."},
+#             {"question": "무게추 쪽이 무거워 아래로 처진다면 어떻게 해야 하는가?", "options": ["무게추를 가대 쪽으로 올린다", "무게추를 봉 끝으로 내린다", "경통을 뒤로 민다", "경통을 앞으로 민다"], "answer": 0, "explan": "무거운 쪽의 모멘트를 줄이기 위해 무게추를 회전축(가대) 쪽으로 가깝게 이동시킵니다."},
+#             {"question": "대물렌즈 쪽이 무거워 앞으로 쏠릴 때 조치 방법은?", "options": ["무게추를 내린다", "경통을 뒤(접안부 쪽)로 민다", "경통을 앞으로 민다", "클램프를 더 꽉 잠근다"], "answer": 1, "explan": "경통 전체를 뒤로 이동시켜 중심을 맞춥니다."},
+#             {"question": "균형을 맞출 때 클램프(잠금장치)의 상태는?", "options": ["꽉 잠근 상태", "풀어서 자유롭게 움직이는 상태", "반만 잠근 상태", "제거한 상태"], "answer": 1, "explan": "어느 쪽으로 기우는지 확인해야 하므로 클램프를 풀어야 합니다."},
+#             {"question": "균형 잡기 전 반드시 장착 완료해야 하는 것은?", "options": ["전원 케이블", "관측에 사용할 모든 액세서리(아이피스 등)", "망원경 덮개", "노트북"], "answer": 1, "explan": "실제 관측 무게와 동일한 상태에서 균형을 잡아야 정확합니다."},
+#             {"question": "적경축 균형이 완벽하다는 것은 어떤 상태인가?", "options": ["무게추가 바닥에 닿은 상태", "손을 놓아도 수평을 유지하는 상태", "클램프가 부러진 상태", "무게추를 뺀 상태"], "answer": 1, "explan": "어느 쪽으로도 기울지 않고 정지해 있어야 균형이 맞는 것입니다."},
+#             {"question": "적위축 균형을 잡기 위해 경통을 움직일 때 주의할 점은?", "options": ["경통을 손으로 꼭 잡고 이동", "최대한 빠르게 이동", "렌즈를 만지며 이동", "무게추를 빼고 이동"], "answer": 0, "explan": "클램프를 푼 상태에서 경통이 갑자기 돌아가 부딪힐 수 있으므로 꼭 붙잡아야 합니다."},
+#             {"question": "균형 확인 시 '적경'과 '적위' 중 무엇을 먼저 하는 것이 일반적인가?", "options": ["적경(1차)", "적위(2차)", "상관없음", "동시에 수행"], "answer": 0, "explan": "보통 무게추 봉을 이용한 적경축 균형을 먼저 잡습니다."},
+#             {"question": "균형이 잘 맞으면 클램프를 살짝만 조여도 망원경이 고정되는가?", "options": ["네", "아니오", "알 수 없음", "무게추에 따라 다름"], "answer": 0, "explan": "균형이 맞으면 작은 힘으로도 장비를 안정적으로 고정하고 움직일 수 있습니다."},
+#         ],
+#         "파인더 정렬": [
+#             {"question": "파인더 정렬의 가장 큰 목적은?", "options": ["배율 확대", "주망원경과 파인더의 시야 일치", "망원경 청소", "사진 촬영"], "answer": 1, "explan": "파인더 십자선 중앙에 있는 물체가 주망원경 중앙에도 보이게 하기 위함입니다."},
+#             {"question": "파인더 정렬 시 추천하는 목표물은?", "options": ["빨리 지나가는 비행기", "멀리 있는 고정된 지상물(안테나 등)", "떠다니는 구름", "근처의 나무 잎사귀"], "answer": 1, "explan": "움직이지 않는 먼 목표물(500m 이상)이 정렬에 적합합니다."},
+#             {"question": "파인더 정렬 시 주망원경의 아이피스는 어떤 것이 좋은가?", "options": ["고배율", "저배율(시야가 넓은 것)", "아이피스 없음", "카메라 연결"], "answer": 1, "explan": "대상을 찾기 쉬운 저배율 아이피스로 먼저 중앙을 잡습니다."},
+#             {"question": "파인더 경통 주변에 있는 3개의 작은 나사의 용도는?", "options": ["파인더 분해용", "파인더 정렬(방향 조절)용", "초점 조절용", "디자인"], "answer": 1, "explan": "나사들을 조금씩 조이고 풀면서 파인더의 조준 방향을 미세하게 바꿉니다."},
+#             {"question": "정렬 순서로 옳은 것은?", "options": ["파인더 먼저 보고 주망원경 맞추기", "주망원경으로 중앙 잡고 파인더 맞추기", "동시에 보기", "렌즈 닦기 먼저 하기"], "answer": 1, "explan": "기준이 되는 주망원경 시야 중앙에 물체를 먼저 두고 파인더를 그에 맞춥니다."},
+#             {"question": "파인더 정렬은 언제 하는 것이 가장 효율적인가?", "options": ["한밤중", "밝은 낮 또는 해질녘", "비오는 날", "상관없음"], "answer": 1, "explan": "밝을 때 지상 물체를 보고 미리 정렬해두어야 밤에 별을 찾기 쉽습니다."},
+#             {"question": "파인더 내부의 십자선 모양은 보통 어떤 형태인가?", "options": ["원형", "십자(+) 모양", "삼각형", "없음"], "answer": 1, "explan": "정확한 중심을 가리키기 위해 십자선이 그려져 있습니다."},
+#             {"question": "파인더의 상이 흐리다면 어디를 돌려야 하는가?", "options": ["가대 나사", "파인더의 접안부 쪽(초점 조절부)", "주망원경 포커서", "무게추"], "answer": 1, "explan": "파인더 자체에도 별도의 초점 조절 기능이 있습니다."},
+#             {"question": "정렬 끝난 후 최종 확인 방법은?", "options": ["눈을 감아본다", "두 망원경 중앙에 같은 물체가 있는지 확인", "망원경을 흔들어본다", "무게추를 옮겨본다"], "answer": 1, "explan": "주망원경과 파인더가 동일한 지점을 가리키는지 더블 체크합니다."},
+#             {"question": "파인더 정렬을 건너뛰면 발생하는 문제는?", "options": ["상이 어두워짐", "원하는 별을 찾기가 매우 힘들어짐", "배율이 낮아짐", "망원경이 쓰러짐"], "answer": 1, "explan": "시야가 좁은 주망원경만으로는 작은 별을 찾기가 거의 불가능합니다."},
+#         ],
+#         "초점 맞추기": [
+#             {"question": "초점을 맞출 때 돌리는 손잡이의 명칭은?", "options": ["클램프", "초점 조절 나사(Focus Knob)", "위도 나사", "방위 나사"], "answer": 1, "explan": "포커서 옆의 둥근 나사를 돌려 상을 뚜렷하게 만듭니다."},
+#             {"question": "초점이 맞지 않았을 때 별의 모습은?", "options": ["작고 날카로운 점", "크고 흐릿한 도넛이나 원형", "보이지 않음", "빨간색으로 보임"], "answer": 1, "explan": "초점이 맞지 않으면 빛이 퍼져서 흐릿한 원형으로 보입니다."},
+#             {"question": "초점 조절 시 가장 주의해야 할 사항은?", "options": ["최대한 빨리 돌리기", "천천히 돌리며 상의 변화 관찰", "힘껏 조이기", "아이피스 빼고 돌리기"], "answer": 1, "explan": "초점 구간을 지나치지 않도록 아주 천천히 조절해야 합니다."},
+#             {"question": "아이피스를 교체할 때마다 초점을 다시 잡아야 하는가?", "options": ["네", "아니오", "망원경마다 다름", "낮에만 해당"], "answer": 0, "explan": "렌즈마다 초점이 맺히는 위치가 다르므로 교체 시마다 미세 조정이 필요합니다."},
+#             {"question": "초점이 가장 잘 맞은 상태는?", "options": ["별이 가장 크게 보일 때", "별이 가장 작고 뚜렷한 점으로 보일 때", "상이 겹쳐 보일 때", "무지개색이 보일 때"], "answer": 1, "explan": "별이 가장 작은 점으로 응축되었을 때가 정초점 상태입니다."},
+#             {"question": "초점 나사를 돌려도 상이 계속 흐리다면 확인해야 할 것은?", "options": ["천정 미러 장착 여부", "관측자의 시력", "렌즈 캡 제거 여부", "전부 다"], "answer": 3, "explan": "기본적인 조립 상태와 캡 제거 여부를 먼저 확인해야 합니다."},
+#             {"question": "굴절 망원경에서 초점 조절은 무엇을 이동시키는가?", "options": ["대물렌즈", "접안부(아이피스)의 위치", "삼각대", "가대"], "answer": 1, "explan": "접안부의 길이를 변화시켜 상이 맺히는 위치를 맞춥니다."},
+#             {"question": "안경 쓴 사용자가 관측할 때 초점은 어떻게 맞추는가?", "options": ["안경 쓴 채로 그대로 둠", "자신의 시력에 맞게 초점 나사 재조절", "초점을 맞출 수 없음", "안경을 벗고 봐도 똑같음"], "answer": 1, "explan": "망원경 초점 나사가 시력 보정 역할을 하므로 본인 눈에 맞게 돌리면 됩니다."},
+#             {"question": "초점 조절 나사가 헛돈다면?", "options": ["나사가 부러진 것", "포커서 고정 나사가 잠겨 있는지 확인", "기름칠 하기", "망원경 교체"], "answer": 1, "explan": "포커서 하단에 이동 방지 고정 나사가 잠겨 있으면 조절 나사가 움직이지 않습니다."},
+#             {"question": "사진 촬영 시 초점 맞추기는 안구 관측보다?", "options": ["더 쉽다", "훨씬 정밀하고 어렵다", "똑같다", "할 필요 없다"], "answer": 1, "explan": "사진은 미세한 핀트 어긋남이 크게 나타나므로 훨씬 정밀해야 합니다."},
+#         ],
+#         "균형 맞추기가 필요한 이유": [
+#             {"question": "균형이 안 맞은 상태로 모터를 돌리면 생기는 문제는?", "options": ["배터리가 오래 감", "모터와 기어에 과부하 및 파손 위험", "별이 더 빨리 보임", "망원경이 가벼워짐"], "answer": 1, "explan": "한쪽으로 쏠린 무게를 억지로 돌리다 보면 정밀 기어에 무리가 갑니다."},
+#             {"question": "균형 잡기는 관측의 어떤 성능에 영향을 주는가?", "options": ["렌즈의 밝기", "정밀한 천체 추적(Tracking) 성능", "망원경의 배율", "관측지의 날씨"], "answer": 1, "explan": "무게 중심이 잘 맞아야 별을 따라가는 추적 장치가 부드럽게 작동합니다."},
+#             {"question": "클램프를 풀었을 때 경통이 휙 돌아가면 위험한 이유는?", "options": ["바람이 불어서", "사용자 부상 및 장비 충돌 파손", "별이 도망가서", "소음 발생"], "answer": 1, "explan": "무거운 경통이 삼각대 등에 부딪히면 렌즈나 가대가 크게 파손될 수 있습니다."},
+#             {"question": "균형이 잘 잡힌 망원경의 장점은?", "options": ["부드러운 조작감", "장비 수명 연장", "진동의 빠른 감쇠", "전부 다"], "answer": 3, "explan": "안전, 성능, 수명 모든 면에서 필수적입니다."},
+#             {"question": "장시간 사진 노출 촬영 시 균형이 중요한 이유는?", "options": ["필름 값을 아끼려고", "미세한 흔들림(가이드 오차) 방지", "배경을 검게 하려고", "카메라 배터리 절약"], "answer": 1, "explan": "균형이 안 맞으면 추적 속도가 미세하게 일정하지 않아 별이 흐르게 찍힙니다."},
+#             {"question": "균형을 맞추지 않아도 되는 망원경은?", "options": ["매우 비싼 망원경", "작은 장난감 망원경", "없음(모든 천체 망원경은 균형이 중요)", "낮에 보는 망원경"], "answer": 2, "explan": "어떤 망원경이든 정밀 관측 장비라면 무게 균형은 기본입니다."},
+#             {"question": "사용자의 안전과 가장 직결된 이유는?", "options": ["눈이 아플까 봐", "고정 나사 해제 시 급격한 회전 방지", "망원경이 무거워서", "추워서"], "answer": 1, "explan": "갑작스러운 회전으로 인한 손가락 끼임이나 장비 추락을 막아줍니다."},
+#             {"question": "매뉴얼에서 강조하는 균형의 핵심 키워드는?", "options": ["디자인", "안전과 정밀도", "속도", "색상"], "answer": 1, "explan": "장비 보호(안전)와 관측 품질(정밀도)이 핵심입니다."},
+#             {"question": "균형이 맞으면 모터 소음은?", "options": ["커진다", "조용하고 부드러워진다", "변화 없다", "끊겨서 들린다"], "answer": 1, "explan": "부하가 적어지므로 모터 구동음이 일정하고 조용해집니다."},
+#             {"question": "균형 잡기를 귀찮아서 건너뛰면?", "options": ["전문가처럼 보임", "장비 고장의 원인이 됨", "별이 더 잘 보임", "시간이 절약됨"], "answer": 1, "explan": "결국 기계적 결함으로 이어져 더 큰 비용과 시간을 낭비하게 됩니다."},
+#         ]
+#     }
 
-    all_cats = list(quiz_bank.keys())
-    sel_cat = st.selectbox("학습 주제 선택", all_cats)
+#     all_cats = list(quiz_bank.keys())
+#     sel_cat = st.selectbox("학습 주제 선택", all_cats)
     
-    list_key = f"quiz_list_{sel_cat}"
-    idx_key = f"quiz_idx_{sel_cat}"
+#     list_key = f"quiz_list_{sel_cat}"
+#     idx_key = f"quiz_idx_{sel_cat}"
 
-    # 세션 초기화
-    if list_key not in st.session_state:
-        q_indices = list(range(len(quiz_bank[sel_cat])))
-        random.shuffle(q_indices)
-        st.session_state[list_key] = q_indices
-        st.session_state[idx_key] = 0
+#     # 세션 초기화
+#     if list_key not in st.session_state:
+#         q_indices = list(range(len(quiz_bank[sel_cat])))
+#         random.shuffle(q_indices)
+#         st.session_state[list_key] = q_indices
+#         st.session_state[idx_key] = 0
 
-    curr_ptr = st.session_state[idx_key]
+#     curr_ptr = st.session_state[idx_key]
 
-    # 모든 문제 소진 시
-    if curr_ptr >= len(st.session_state[list_key]):
-        st.success("해당 주제의 문제를 모두 확인했습니다! 다시 섞습니다.")
-        random.shuffle(st.session_state[list_key])
-        st.session_state[idx_key] = 0
-        st.rerun()
+#     # 모든 문제 소진 시
+#     if curr_ptr >= len(st.session_state[list_key]):
+#         st.success("해당 주제의 문제를 모두 확인했습니다! 다시 섞습니다.")
+#         random.shuffle(st.session_state[list_key])
+#         st.session_state[idx_key] = 0
+#         st.rerun()
 
-    q_idx = st.session_state[list_key][curr_ptr]
-    q_item = quiz_bank[sel_cat][q_idx]
+#     q_idx = st.session_state[list_key][curr_ptr]
+#     q_item = quiz_bank[sel_cat][q_idx]
 
-    # --- [자동 채점 함수 정의] ---
-    def check_quiz_ans():
-        # st.radio의 현재 선택값 가져오기
-        selected = st.session_state[f"radio_{sel_cat}_{q_idx}"]
-        ans_text = q_item['options'][q_item['answer']]
+#     # --- [자동 채점 함수 정의] ---
+#     def check_quiz_ans():
+#         # st.radio의 현재 선택값 가져오기
+#         selected = st.session_state[f"radio_{sel_cat}_{q_idx}"]
+#         ans_text = q_item['options'][q_item['answer']]
         
-        if selected == ans_text:
-            st.session_state.quiz_feedback = ("success", "✅ 정답입니다!")
-        else:
-            st.session_state.quiz_feedback = ("error", f"❌ 오답입니다. 정답은: {ans_text}")
-            # 오답 노트 기록
-            new_wrong = {
-                "category": f"🔭 망원경 운용 ({sel_cat})",
-                "question": q_item['question'],
-                "answer": ans_text
-            }
-            if 'wrong_answers' not in st.session_state:
-                st.session_state.wrong_answers = []
-            if new_wrong not in st.session_state.wrong_answers:
-                st.session_state.wrong_answers.append(new_wrong)
+#         if selected == ans_text:
+#             st.session_state.quiz_feedback = ("success", "✅ 정답입니다!")
+#         else:
+#             st.session_state.quiz_feedback = ("error", f"❌ 오답입니다. 정답은: {ans_text}")
+#             # 오답 노트 기록
+#             new_wrong = {
+#                 "category": f"🔭 망원경 운용 ({sel_cat})",
+#                 "question": q_item['question'],
+#                 "answer": ans_text
+#             }
+#             if 'wrong_answers' not in st.session_state:
+#                 st.session_state.wrong_answers = []
+#             if new_wrong not in st.session_state.wrong_answers:
+#                 st.session_state.wrong_answers.append(new_wrong)
 
-    st.write(f"**Q. {q_item['question']}**")
+#     st.write(f"**Q. {q_item['question']}**")
     
-    # 라디오 버튼 (on_change를 넣어 선택 즉시 채점)
-    user_choice = st.radio(
-        "보기", 
-        q_item['options'], 
-        key=f"radio_{sel_cat}_{q_idx}",
-        on_change=check_quiz_ans
-    )
+#     # 라디오 버튼 (on_change를 넣어 선택 즉시 채점)
+#     user_choice = st.radio(
+#         "보기", 
+#         q_item['options'], 
+#         key=f"radio_{sel_cat}_{q_idx}",
+#         on_change=check_quiz_ans
+#     )
     
-    # 결과 및 해설 표시
-    if 'quiz_feedback' in st.session_state:
-        status, msg = st.session_state.quiz_feedback
-        if status == "success":
-            st.success(msg)
-        else:
-            st.error(msg)
-        st.info(f"💡 해설: {q_item['explan']}")
+#     # 결과 및 해설 표시
+#     if 'quiz_feedback' in st.session_state:
+#         status, msg = st.session_state.quiz_feedback
+#         if status == "success":
+#             st.success(msg)
+#         else:
+#             st.error(msg)
+#         st.info(f"💡 해설: {q_item['explan']}")
 
-    col1, col2 = st.columns(2)
-    with col1:
-        # 버튼으로도 채점 확인 가능
-        if st.button("결과 보기"):
-            check_quiz_ans()
-            st.rerun()
+#     col1, col2 = st.columns(2)
+#     with col1:
+#         # 버튼으로도 채점 확인 가능
+#         if st.button("결과 보기"):
+#             check_quiz_ans()
+#             st.rerun()
             
-    with col2:
-        if st.button("다음 문제 넘어가기"):
-            st.session_state[idx_key] += 1
-            if 'quiz_feedback' in st.session_state:
-                del st.session_state.quiz_feedback
-            st.rerun()
+#     with col2:
+#         if st.button("다음 문제 넘어가기"):
+#             st.session_state[idx_key] += 1
+#             if 'quiz_feedback' in st.session_state:
+#                 del st.session_state.quiz_feedback
+#             st.rerun()
 
-elif menu == "🔢 지학 계산기":
-    st.header("🔢 지구과학 계산형 문제")
-    st.write("공식을 떠올리며 정확한 수치를 입력하세요. (소수점 자리수 주의!)")
+# elif menu == "🔢 지학 계산기":
+#     st.header("🔢 지구과학 계산형 문제")
+#     st.write("공식을 떠올리며 정확한 수치를 입력하세요. (소수점 자리수 주의!)")
 
-    # [1. 유형 리스트 초기화]
-    if 'geo_type_list' not in st.session_state:
-        types = ["집광력", "초점비", "배율", "분해능"]
-        random.shuffle(types)
-        st.session_state.geo_type_list = types
-        st.session_state.geo_type_idx = 0
+#     # [1. 유형 리스트 초기화]
+#     if 'geo_type_list' not in st.session_state:
+#         types = ["집광력", "초점비", "배율", "분해능"]
+#         random.shuffle(types)
+#         st.session_state.geo_type_list = types
+#         st.session_state.geo_type_idx = 0
 
-    # [2. 모든 문제 소진 시 리셋]
-    if st.session_state.geo_type_idx >= len(st.session_state.geo_type_list):
-        st.balloons()
-        st.success("모든 계산 유형을 완료했습니다! 다시 섞어서 시작합니다.")
-        random.shuffle(st.session_state.geo_type_list)
-        st.session_state.geo_type_idx = 0
-        if 'geo_q' in st.session_state: del st.session_state.geo_q
-        st.rerun()
+#     # [2. 모든 문제 소진 시 리셋]
+#     if st.session_state.geo_type_idx >= len(st.session_state.geo_type_list):
+#         st.balloons()
+#         st.success("모든 계산 유형을 완료했습니다! 다시 섞어서 시작합니다.")
+#         random.shuffle(st.session_state.geo_type_list)
+#         st.session_state.geo_type_idx = 0
+#         if 'geo_q' in st.session_state: del st.session_state.geo_q
+#         st.rerun()
 
-    # [3. 현재 문제 생성 및 세션 고정]
-    if 'geo_q' not in st.session_state:
-        current_type = st.session_state.geo_type_list[st.session_state.geo_type_idx]
+#     # [3. 현재 문제 생성 및 세션 고정]
+#     if 'geo_q' not in st.session_state:
+#         current_type = st.session_state.geo_type_list[st.session_state.geo_type_idx]
         
-        if current_type == "집광력":
-            aperture = random.randint(5, 30) * 10
-            # 집광력 공식: (D/7)^2
-            correct_ans = round((aperture / 7)**2, 1)
-            msg = f"🔭 **[집광력]** 구경이 **{aperture}mm**인 망원경의 집광력은 육안(7mm)의 약 몇 배인가? (소수점 첫째자리 반올림)"
+#         if current_type == "집광력":
+#             aperture = random.randint(5, 30) * 10
+#             # 집광력 공식: (D/7)^2
+#             correct_ans = round((aperture / 7)**2, 1)
+#             msg = f"🔭 **[집광력]** 구경이 **{aperture}mm**인 망원경의 집광력은 육안(7mm)의 약 몇 배인가? (소수점 첫째자리 반올림)"
             
-        elif current_type == "초점비":
-            aperture = random.randint(5, 20) * 10
-            f_ratio = random.randint(5, 12)
-            f_length = aperture * f_ratio
-            correct_ans = float(f_ratio)
-            msg = f"🔭 **[초점비]** 구경 **{aperture}mm**, 초점거리 **{f_length}mm**인 망원경의 초점비(F)는?"
+#         elif current_type == "초점비":
+#             aperture = random.randint(5, 20) * 10
+#             f_ratio = random.randint(5, 12)
+#             f_length = aperture * f_ratio
+#             correct_ans = float(f_ratio)
+#             msg = f"🔭 **[초점비]** 구경 **{aperture}mm**, 초점거리 **{f_length}mm**인 망원경의 초점비(F)는?"
 
-        elif current_type == "배율":
-            obj_fl = random.randint(500, 1500)
-            eye_fl = random.choice([10, 20, 40, 50, 100, 8, 200, 400, 500])
-            correct_ans = round(obj_fl / eye_fl, 1)
-            msg = f"🔭 **[배율]** 대물렌즈 초점거리 **{obj_fl}mm**, 접안렌즈 초점거리 **{eye_fl}mm**일 때 배율은 몇 배인가?"
+#         elif current_type == "배율":
+#             obj_fl = random.randint(500, 1500)
+#             eye_fl = random.choice([10, 20, 40, 50, 100, 8, 200, 400, 500])
+#             correct_ans = round(obj_fl / eye_fl, 1)
+#             msg = f"🔭 **[배율]** 대물렌즈 초점거리 **{obj_fl}mm**, 접안렌즈 초점거리 **{eye_fl}mm**일 때 배율은 몇 배인가?"
 
-        elif current_type == "분해능":
-            # 실무 공식보다 교과과정 약식(116/D)을 쓸지, 정밀공식을 쓸지에 따라 조정 가능
-            # 여기서는 제시해주신 정밀 공식 형태를 유지하되 숫자를 다듬었습니다.
-            aperture = random.choice([1000, 2000, 3000, 4000, 1342, 2351, 2938, 2441, 5023, 3122])
-            wavelength_nm = 550 
-            res_val = (1.22 * (wavelength_nm * 1e-6) / aperture) * 206265
-            correct_ans = round(res_val, 2)
-            msg = f"🔭 **[분해능]** 구경 **{aperture}mm**, 파장 **{wavelength_nm}nm**일 때 분해능은 몇 초(\")인가? (소수점 둘째자리 반올림)"
+#         elif current_type == "분해능":
+#             # 실무 공식보다 교과과정 약식(116/D)을 쓸지, 정밀공식을 쓸지에 따라 조정 가능
+#             # 여기서는 제시해주신 정밀 공식 형태를 유지하되 숫자를 다듬었습니다.
+#             aperture = random.choice([1000, 2000, 3000, 4000, 1342, 2351, 2938, 2441, 5023, 3122])
+#             wavelength_nm = 550 
+#             res_val = (1.22 * (wavelength_nm * 1e-6) / aperture) * 206265
+#             correct_ans = round(res_val, 2)
+#             msg = f"🔭 **[분해능]** 구경 **{aperture}mm**, 파장 **{wavelength_nm}nm**일 때 분해능은 몇 초(\")인가? (소수점 둘째자리 반올림)"
         
-        st.session_state.geo_q = (msg, correct_ans)
+#         st.session_state.geo_q = (msg, correct_ans)
 
-    # 문제 표시
-    msg, correct_ans = st.session_state.geo_q
-    st.warning(msg)
+#     # 문제 표시
+#     msg, correct_ans = st.session_state.geo_q
+#     st.warning(msg)
 
-    # --- [자동 채점 함수 정의] ---
-    def check_geo_calc():
-        # key를 통해 입력된 값 가져오기
-        user_val = st.session_state[f"geo_input_{st.session_state.geo_type_idx}"]
+#     # --- [자동 채점 함수 정의] ---
+#     def check_geo_calc():
+#         # key를 통해 입력된 값 가져오기
+#         user_val = st.session_state[f"geo_input_{st.session_state.geo_type_idx}"]
         
-        if abs(user_val - correct_ans) < 0.05: # 오차 허용
-            st.session_state.geo_feedback = ("success", f"✅ 정답입니다! (정확한 답: {correct_ans})")
-        else:
-            st.session_state.geo_feedback = ("error", f"❌ 오답입니다. 다시 계산해 보세요! (정답: {correct_ans})")
-            # 오답 노트 기록
-            new_wrong = {
-                "category": "🔢 지학 계산기",
-                "question": msg,
-                "answer": str(correct_ans)
-            }
-            if 'wrong_answers' not in st.session_state:
-                st.session_state.wrong_answers = []
-            if new_wrong not in st.session_state.wrong_answers:
-                st.session_state.wrong_answers.append(new_wrong)
+#         if abs(user_val - correct_ans) < 0.05: # 오차 허용
+#             st.session_state.geo_feedback = ("success", f"✅ 정답입니다! (정확한 답: {correct_ans})")
+#         else:
+#             st.session_state.geo_feedback = ("error", f"❌ 오답입니다. 다시 계산해 보세요! (정답: {correct_ans})")
+#             # 오답 노트 기록
+#             new_wrong = {
+#                 "category": "🔢 지학 계산기",
+#                 "question": msg,
+#                 "answer": str(correct_ans)
+#             }
+#             if 'wrong_answers' not in st.session_state:
+#                 st.session_state.wrong_answers = []
+#             if new_wrong not in st.session_state.wrong_answers:
+#                 st.session_state.wrong_answers.append(new_wrong)
 
-    # 숫자 입력창 (엔터 치면 즉시 채점)
-    st.number_input(
-        "정답을 입력하고 Enter를 누르세요:", 
-        value=0.0, 
-        step=0.01, 
-        key=f"geo_input_{st.session_state.geo_type_idx}",
-        on_change=check_geo_calc
-    )
+#     # 숫자 입력창 (엔터 치면 즉시 채점)
+#     st.number_input(
+#         "정답을 입력하고 Enter를 누르세요:", 
+#         value=0.0, 
+#         step=0.01, 
+#         key=f"geo_input_{st.session_state.geo_type_idx}",
+#         on_change=check_geo_calc
+#     )
 
-    # 피드백 메시지 출력
-    if 'geo_feedback' in st.session_state:
-        status, feedback_msg = st.session_state.geo_feedback
-        if status == "success":
-            st.success(feedback_msg)
-        else:
-            st.error(feedback_msg)
+#     # 피드백 메시지 출력
+#     if 'geo_feedback' in st.session_state:
+#         status, feedback_msg = st.session_state.geo_feedback
+#         if status == "success":
+#             st.success(feedback_msg)
+#         else:
+#             st.error(feedback_msg)
 
-    # 하단 버튼
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("정답 확인하기"):
-            check_geo_calc()
-            st.rerun()
+#     # 하단 버튼
+#     col1, col2 = st.columns(2)
+#     with col1:
+#         if st.button("정답 확인하기"):
+#             check_geo_calc()
+#             st.rerun()
             
-    with col2:
-        if st.button("새로운 문제 생성"):
-            st.session_state.geo_type_idx += 1
-            if 'geo_q' in st.session_state: del st.session_state.geo_q
-            if 'geo_feedback' in st.session_state: del st.session_state.geo_feedback
-            st.rerun()
+#     with col2:
+#         if st.button("새로운 문제 생성"):
+#             st.session_state.geo_type_idx += 1
+#             if 'geo_q' in st.session_state: del st.session_state.geo_q
+#             if 'geo_feedback' in st.session_state: del st.session_state.geo_feedback
+#             st.rerun()
             
-elif menu == "🧬 생물 퀴즈":
-    st.header("🧬 무자비한 생물학 퀴즈 (189문항)")
+# elif menu == "🧬 생물 퀴즈":
+#     st.header("🧬 무자비한 생물학 퀴즈 (189문항)")
 
-    # 1. 데이터 정의 (세션에 저장)
-    if 'bio_dict_data' not in st.session_state:
-        st.session_state.bio_dict_data = {
-            "효소와 기질의 결합처럼 가역적이고 쉽게 분리/합성되어 구조 변화에 기여하는 결합은? (강한/약한 결합)": "약한 결합",
-            "세포골격을 따라 운동단백질이 이동할 수 있는 이유는 어떤 결합 덕분인가?": "약한 결합",
-            "단백질이 기능을 하기 위해 접히는 구조를 형성할 때 주로 작용하는 결합은?": "약한 결합",
-            "전기음성도가 큰 산소나 질소와 결합할 때 형성되며 물 분자 사이의 인력이기도 한 것은?": "수소 결합",
-            "소수성 분자들이 매우 가깝게 결합할 때 전하가 순간적으로 이동하여 발생하는 인력은?": "반데르발스 인력",
-            "털이 많아 이 인력(반데르발스)을 극대화하여 벽에 붙을 수 있는 동물의 예시는?": "도마뱀 붙이",
-            "엔돌핀과 모르핀이 동일하게 기능할 수 있는 이유는 수용체와 무엇이 유사하기 때문인가?": "구조",
-            "구조가 기능을 결정한다는 원리에 따라, 분자가 특정한 '이것' 구조를 가질 때만 생체분자 상호작용이 가능하다. 이것은?": "입체적",
-            "화학평형 상태는 정반응과 역반응의 무엇이 같을 때인가?": "속도",
-            "연소나 앙금 형성처럼 평형으로 돌아가지 못하는 반응을 무엇이라 하는가?": "비가역 반응",
-            "화학평형 상태에서 반응물과 생성물의 비율은 어떻게 되는가?": "일정하게 유지된다",
-            "화학평형 상태는 순변화가 없지만 반응이 멈춘 것은 아니다. 이를 무슨 상태라 하는가?": "동적 평형 상태",
-            "식물의 물과 양분 수송에서 물분자끼리 수소결합으로 연결되어 나타나는 힘은?": "응집력",
-            "식물 잎의 기공을 통해 수증기가 빠져나가며 물을 뺏기는 현상은?": "증산작용",
-            "증산작용 시 물이 없어지면 세포벽 쪽으로 물이 후퇴할 때, 표면적을 최소화하려는 성질은?": "표면장력",
-            "100m가 넘는 나무가 물기둥을 형성할 때 물분자끼리의 응집력 외에 물관 내벽에 작용하는 힘은?": "부착력",
-            "물관 내벽은 물이 잘 붙을 수 있도록 어떤 성질을 띠고 있는가? (친수성/소수성)": "친수성",
-            "물 1g의 온도를 1도 변화시키는데 필요한 에너지는?": "비열",
-            "물의 비열이 큰 이유는 온도를 올리기 전에 먼저 어떤 결합을 끊어야 하기 때문인가?": "수소 결합",
-            "비열이 큰 물은 땀을 흘려 체온을 조절할 수 있다. 이때 흡수하는 열을 무엇이라 하는가?": "기화열",
-            "얼음이 물보다 밀도가 작아 뜨는 이유는 얼 때 어떤 구조를 띠며 팽창하기 때문인가?": "육각형 고리 구조",
-            "물이 가장 무거워서 얼지 않고 생명체가 살 수 있게 해주는 제일 밑바닥 온도는 몇 도인가?": "4도",
-            "이온이나 극성 분자가 물에 녹을 때, 물 분자들에 의해 둘러싸이는 현상을 무엇이라 하는가?": "수화껍질",
-            "수화껍질 형성 시, 양이온은 물 분자의 어떤 원자 쪽으로 둘러싸이는가? (산소/수소)": "산소",
-            "수화껍질 형성 시, 음이온은 물 분자의 어떤 원자 쪽으로 둘러싸이는가? (산소/수소)": "수소",
-            "산소(O2)는 비극성이라 물에 잘 녹지 않는다. 이를 운반하기 위해 적혈구에 있는 단백질은?": "헤모글로빈",
-            "셀룰로오스나 수건은 친수성이지만 물에 녹는가? (O/X)": "X",
-            "탄소가 다양한 분자 구조를 확장시킬 수 있는 이유는 원자가 전자가 몇 개이기 때문인가?": "4개",
-            "이산화탄소(CO2)는 탄소를 포함하지만 생물학에서 유기물로 취급하는가? (O/X)": "X",
-            "탄화수소 사슬의 변이 4가지는 길이 변화, 이중결합 위치, 고리 존재, 그리고 무엇인가?": "가지치기",
-            "수소가 매우 많아 연료로 사용되며 지방산의 꼬리를 구성하는 물질군은?": "탄화수소",
-            "분자식은 같지만 구조가 달라 성질이 다른 화합물을 무엇이라 하는가?": "이성질체",
-            "포도당과 과당은 공유결합 배열이 다른 무슨 이성질체 관계인가?": "구조 이성질체",
-            "이중결합의 회전 제한으로 발생하며 수소가 반대 방향에 위치한 이성질체는?": "트랜스 이성질체",
-            "눈의 시각세포에 존재하며 빛을 받아 시스/트랜스 이성질체로 변하는 분자는?": "레티날",
-            "비대칭 탄소를 기준으로 네 개의 분자가 다를 때 거울에 비친 듯 형성되는 이성질체는?": "거울상 이성질체",
-            "생체 내 단백질을 구성하는 아미노산은 모두 거울상 이성질체 중 어떤 형인가? (L/D)": "L형",
-            "생체 내 포도당은 모두 거울상 이성질체 중 어떤 형인가? (L/D)": "D형",
-            "당(알데하이드, 케톤)에 존재하며 극성을 띠는 친수성 작용기는?": "카르보닐기",
-            "수소이온을 내놓아 산 형태로 존재하며 아미노산이 가지고 있는 작용기는?": "카르복실기",
-            "친수성이며 양전하를 띠고 단백질(아미노산) 구성에 필수적인 질소 포함 작용기는?": "아미노기",
-            "작용기 중 유일하게 화학반응 관여보다 소수성을 부여하는 화학기는?": "메틸기",
-            "황화수소 작용기(SH)를 가져 친수성/소수성 양다리가 가능한 아미노산은?": "시스테인",
-            "아데노신 3인산에서 유기인산이 떨어져 분해될 때 무기인산 형태로 바뀌면서 무엇을 방출하는가?": "물",
-            "생체 내 에너지 화폐로 사용되며 확장된 옥텟 규칙을 갖는 인산기를 3개 가진 물질은?": "ATP",
-            "단량체들이 공유결합으로 연결되어 중합체를 만들 때 물 분자가 빠져나가는 반응은?": "탈수 축합 반응",
-            "중합체가 분해되어 단량체가 될 때 일어나는 소화 반응의 이름은?": "가수분해",
-            "단량체가 모여 중합체가 되면서 이전에는 없던 새로운 특성이 나타나는 것을 무엇이라 하는가?": "창발적 특성",
-            "미토콘드리아가 에너지를 얻기 위해 포도당의 전자를 사용하는 과정을 주로 수행하는 탄수화물의 기능은?": "연료",
-            "단당류의 조건 3가지는 수산기 다수, ( ) 존재, CH2O 배수 분자식이다. 괄호는?": "카르보닐기",
-            "포도당은 6탄당이라 이중막을 통과하지 못해, 초기 분해 산물인 몇 탄당(피루브산)으로 쪼개서 넣는가?": "3탄당",
-            "카르보닐기가 분자 끝에 위치하는 당을 부르는 명칭은?": "알도오스",
-            "카르보닐기가 분자 중간에 위치하는 당을 부르는 명칭은?": "케토오스",
-            "세포 내에서 포도당은 주로 어떤 모양의 고리를 형성하는가?": "육각 고리",
-            "세포 내에서 과당은 주로 어떤 모양의 고리를 형성하는가?": "오각 고리",
-            "고리 형성 시 반응성이 큰 카르보닐기 탄소와 수산기가 만나 OH와 O를 모두 가지게 된 탄소 구조는?": "헤미 아세탈 구조",
-            "이당류를 형성할 때 두 단당류 사이의 공유결합 이름은?": "글리코시드 결합",
-            "포도당과 과당이 결합하여 만들어진 이당류는?": "설탕",
-            "포도당과 포도당이 결합하여 만들어진 이당류는?": "엿당",
-            "포도당과 갈락토오스가 결합하여 만들어진 이당류는?": "젖당",
-            "설탕은 반응성이 약해 식물이 체관으로 운반할 때 쓴다. 이런 당을 무슨 당이라 하는가?": "비환원당",
-            "식물의 주된 에너지 저장용 다당류는?": "전분 (또는 녹말)",
-            "아밀로오스와 달리 1-6 글리코시드 결합으로 가지를 뻗는 식물의 녹말 성분은?": "아밀로펙틴",
-            "아밀로펙틴보다 가지가 훨씬 많아 동물의 주된 에너지 저장 다당류로 쓰이는 것은?": "글리코젠",
-            "동물이 식물보다 가지가 많은 글리코젠을 쓰는 이유는 한 번에 많이 끊어 무엇을 빨리 얻기 위함인가?": "에너지",
-            "셀룰로오스를 구성하는 포도당은 1번 탄소 OH가 위에 있는 무슨 포도당인가? (알파/베타)": "베타",
-            "알파 포도당 결합인 아밀로오스는 나선형이지만, 베타 결합이 교대로 일어나는 셀룰로오스는 무슨 구조인가?": "직선형",
-            "세 가지 주요 지질은 지방, ( ), 스테로이드이다. 괄호는?": "인지질",
-            "지방은 글리세롤 1분자와 지방산 몇 분자가 결합한 형태인가?": "3개",
-            "지방산의 카르복실기와 글리세롤의 수산기 사이에서 물이 빠지며 형성되는 결합은?": "에스터 결합",
-            "이중결합이 전혀 없어 상온에서 버터처럼 고체 상태로 존재하는 지방산은?": "포화 지방산",
-            "이중결합이 존재하여 빽빽하게 뭉치지 못해 상온에서 액체 상태인 지방은?": "불포화 지방",
-            "액체 식물성 기름에 수소를 첨가(수소화)하는 과정에서 생기며 동맥경화를 유발하는 부산물은?": "트랜스 지방",
-            "지방 1g당 발생시키는 에너지는 대략 몇 kcal인가?": "9",
-            "동물이 탄수화물 대신 지방을 에너지 저장고로 선호하는 이유는 이동 시 유리한 무슨 목적 때문인가?": "경량화",
-            "지방과 달리 인지질은 글리세롤의 세 번째 OH에 지방산 대신 무엇이 붙는가?": "인산기",
-            "인지질이 한 분자 안에 친수성 머리와 소수성 꼬리를 모두 갖는 성질을 무엇이라 하는가?": "양친매성",
-            "인지질은 물 속에서 자발적으로 어떤 막 구조를 형성하는가?": "이중층",
-            "진핵세포에서 인지질 이중층은 외부와의 분리뿐만 아니라 소기관들의 무엇 분리를 가능하게 하는가?": "내부 구획",
-            "스테로이드 구조는 보통 육각 고리 3개와 오각 고리 몇 개로 구성되는가?": "1개",
-            "동물 세포막에 박혀 유동성을 조절하며 각종 성호르몬의 전구체가 되는 스테로이드는?": "콜레스테롤",
-            "생명체가 굶주릴 때 몸을 구성하는 성분이라 가장 마지막에 분해해 쓰는 거대분자는?": "단백질",
-            "아미노산 중심 탄소에 결합하여 각 아미노산의 종류와 친수/소수 성질을 결정하는 것은?": "곁사슬",
-            "비대칭 탄소가 없어 거울상 이성질체가 존재하지 않는 유일한 아미노산은?": "글라이신",
-            "아미노산과 아미노산이 연결되는 공유결합의 이름은?": "펩타이드 결합",
-            "폴리펩타이드 사슬에서 아미노기가 위치한 시작점 말단을 무엇이라 부르는가?": "N말단",
-            "폴리펩타이드 사슬에서 카르복실기가 위치한 끝점 말단을 무엇이라 부르는가?": "C말단",
-            "단백질의 최종 입체 구조를 결정하는 가장 근본적인 아미노산 서열은 단백질의 몇 차 구조인가?": "1차 구조",
-            "단백질 2차 구조인 알파 나선과 베타 병풍은 골격 간의 어떤 결합으로 유지되는가?": "수소 결합",
-            "알파 나선 구조는 몇 번째 옆에 있는 아미노산과 수소결합을 형성하는가?": "4번째",
-            "단백질 3차 구조은 곁사슬들 간의 상호작용이다. 이중 소수성 상호작용으로 가까워졌을 때 생기는 힘은?": "반데르발스 상호작용",
-            "헤모글로빈처럼 2개 이상의 폴리펩타이드가 모여 완성되는 단백질은 몇 차 구조인가?": "4차 구조",
-            "헤모글로빈은 알파 폴리펩타이드 2개와 베타 폴리펩타이드 몇 개로 구성되는가?": "2개",
-            "낫모양 적혈구 빈혈증은 몇 차 구조(아미노산 서열)의 변화가 원인인가?": "1차 구조",
-            "낫모양 적혈구 빈혈증에서 6번 아미노산인 글루탐산이 어떤 소수성 아미노산으로 치환되는가?": "발린",
-            "낫모양 적혈구가 혈관에서 문제를 일으키는 이유는 구조가 뒤틀려 모세혈관에 어떻게 되기 때문인가?": "걸린다",
-            "단백질의 약한 결합이 끊어져 2차, 3차 구조가 무너지고 기능을 잃는 현상을 무엇이라 하는가?": "변성",
-            "변성된 단백질은 비가역 반응이 아니라면 1차 구조가 멀쩡할 때 다시 복원될 수 있는가? (O/X)": "O",
-            "인산이 있어 강력한 산성을 띠며, 유전 정보를 저장하고 전달하는 거대분자는?": "핵산",
-            "DNA라는 책 안에 염기서열 형태로 저장된 실제 정보의 내용을 무엇이라 부르는가?": "유전자",
-            "뉴클레오타이드를 구성하는 3가지는 5탄당, ( ), 인산기이다. 괄호는?": "질소성 염기",
-            "뉴클레오타이드에서 염기는 5탄당의 몇 번 탄소에 결합하는가?": "1번",
-            "뉴클레오타이드에서 인산기는 5탄당의 몇 번 탄소에 결합하는가?": "5번",
-            "디옥시리보오스는 리보오스의 몇 번 탄소에 있는 OH가 H로 바뀐 것인가?": "2번",
-            "뉴클레오타이드에서 인산기를 제외하고 당과 염기만 있는 부분을 무엇이라 하는가?": "뉴클레오사이드",
-            "염기 중 두 고리를 가진 것은 퓨린, 한 고리를 가진 것은 무엇이라 하는가?": "피리미딘",
-            "DNA에는 존재하지만 RNA에는 없는 피리미딘 염기는?": "티민 (T)",
-            "RNA에는 존재하지만 DNA에는 없는 피리미딘 염기는?": "유라실 (U)",
-            "뉴클레오타이드(일인산)를 다른 말로 줄여 부를 때의 약자는? (예: ATP, ADP 중)": "NMP (또는 AMP)",
-            "핵산 중합체에서 당과 인산기 사이의 공유결합 명칭은?": "포스포다이에스터 결합",
-            "폴리뉴클레오타이드 사슬에서 OH가 노출된 쪽은 몇 프라임 말단인가?": "3프라임",
-            "DNA 두 가닥은 서로 평행하되 반대 방향으로 향하는데, 이 구조적 특징을 무엇이라 하는가?": "역평행",
-            "DNA 두 가닥을 서로 마주보게 결합시켜 주는 염기 간의 결합 종류는?": "수소 결합",
-            "항상 퓨린과 피리미딘이 짝을 지어 DNA 이중나선의 폭은 항상 몇 nm로 일정한가?": "2nm",
-            "염기서열을 아미노산 서열로 바꾸기 위해 DNA 정보를 RNA로 복사하는 과정을 무엇이라 하는가?": "전사",
-            "코르크 마개를 관찰해 세포벽 빈 공간을 보고 'Cell'이라 처음 명명한 학자는?": "훅",
-            "광학현미경은 배율과 대비, 그리고 두 점을 구분하는 선명도인 ( )이 중요하다. 괄호는?": "해상력",
-            "표면에 금속을 씌우고 전자를 쏘아 물체의 입체 구조(흑백)를 관찰하는 전자현미경은?": "주사 전자 현미경 (SEM)",
-            "세포를 동결건조시켜 전자를 통과시켜 내부 단면을 관찰하는 전자현미경은?": "투과 전자 현미경 (TEM)",
-            "세포를 부수고 원심분리기를 돌려 크기와 밀도에 따라 소기관을 분리하는 방법은?": "세포 분획법",
-            "세포 분획법 시 가장 먼저(가장 무거워서) 가라앉는 세포 소기관은?": "핵",
-            "진핵세포와 원핵세포의 공통 구조 4가지는 세포막, 세포질, 염색체, 그리고 단백질 합성 기구인 ( )이다.": "리보솜",
-            "원핵세포는 막성 소기관과 진정한 핵이 없다. 대신 DNA가 뭉쳐있는 곳을 무엇이라 부르는가?": "핵양체",
-            "세포 크기가 커지면 부피에 비해 표면적 비율이 감소해 대사가 비효율적이다. 그래서 생장할 때 부피를 키우지 않고 무엇을 늘리는가?": "세포 수",
-            "진핵세포가 소기관을 막으로 구획화하여 얻는 장점은 여러 대사 동시 진행과 물질 탐색 시의 무엇인가?": "경제성 (효율성)",
-            "핵막은 외막과 내막으로 이루어진 이중막이다. 물질 출입을 통제하는 구멍을 구성하는 단백질 복합체는?": "핵공 복합체",
-            "DNA와 히스톤 단백질의 복합체를 일컫는 말은?": "염색체",
-            "핵 내부에 있으며 rRNA 유전자와 단백질이 모여 리보솜 소단위체들을 조립하는 곳은?": "인",
-            "막이 없는 비막성 소기관이며, rRNA와 단백질로 구성되어 단백질을 합성하는 곳은?": "리보솜",
-            "리보솜은 평소에 대/소 단위체가 떨어져 있다가, 무엇이 올 때만 합쳐져 번역을 시작하는가?": "mRNA",
-            "모든 단백질 합성은 부착 리보솜이 아닌 어느 리보솜에서 먼저 시작되는가?": "자유 리보솜",
-            "인지질과 스테로이드 합성, 해독작용, 칼슘 저장을 담당하는 막성 소기관은?": "활면 소포체",
-            "조면 소포체는 표면에 무엇이 붙어있어 거칠게 보이는가?": "리보솜",
-            "조면 소포체에서 아스파라긴(N)에 올리고당을 붙여 단백질이 올바르게 접히도록 돕는 과정은?": "N-당화 (N글리코실화)",
-            "조면 소포체는 합성된 단백질을 골지체로 보내기 위해 막을 떼어내어 무엇을 만드는가?": "수송 소낭",
-            "골지체는 단백질을 가공, 분류, 수송한다. 세린이나 트레오닌의 O에 당을 붙이는 수정 과정을 무엇이라 하는가?": "O-당화",
-            "골지체가 분비될 물질 중 리소좀으로 보낼 물질을 분류하기 위해 만노오스 6번 탄소에 붙이는 표지는?": "인산기",
-            "골지체와 소포체의 납작한 주머니 구조를 부르는 명칭은?": "시스터나",
-            "소낭을 받아들이는 골지체의 안쪽 면을 무슨 면이라 부르는가?": "시스면",
-            "가공된 물질을 담은 소낭이 떨어져 나가는 골지체의 바깥쪽 면을 무슨 면이라 부르는가?": "트랜스면",
-            "시스면이 점차 밀려 중간층이 되고 최종적으로 트랜스면이 된다는 골지체 역동성 모델은?": "시스터나 성숙 모델",
-            "리소좀 내부에는 고분자를 분해하는 어떤 효소가 가득 차 있는가?": "가수분해 효소",
-            "리소좀 내부는 강한 산성이다. pH는 대략 얼마인가?": "pH 5",
-            "아메바나 백혈구가 외부 물질을 둘러싸 식포를 형성한 뒤 리소좀과 융합하여 소화하는 과정은?": "식세포 작용",
-            "고장난 미토콘드리아 등 제 기능을 못하는 자기 소기관을 리소좀과 결합시켜 분해하는 과정은?": "자가소화 작용",
-            "리소좀의 지질분해효소 결핍으로 잔류소체가 뇌에 쌓여 심각한 문제를 일으키는 유전병은?": "테이 삭스병",
-            "짚신벌레가 민물에서 물이 계속 들어와 터지는 것을 막기 위해 물을 퍼내는 액포는?": "수축포",
-            "식물 세포의 생장(부피 팽창)에 핵심적인 역할을 하는 커다란 소기관은?": "중간 액포 (중심 액포)",
-            "미토콘드리아와 엽록체가 원래 독립된 세균이었다가 진핵세포 안으로 들어와 공생하게 되었다는 이론은?": "세포내 공생설",
-            "미토콘드리아가 세균에서 유래했음을 보여주는 강력한 증거로, 독자적으로 가지고 있는 원형 물질 두 가지는 DNA와 무엇인가?": "리보솜",
-            "간세포 등 에너지를 많이 쓰는 세포에 특히 많으며, 당 화학에너지를 ATP로 변환하는 소기관은?": "미토콘드리아",
-            "미토콘드리아 내막이 쭈글쭈글하게 접혀 표면적을 넓힌 구조의 이름은?": "크리스타",
-            "미토콘드리아의 가장 안쪽 공간으로 독자적인 DNA와 리보솜이 존재하는 곳은?": "기질",
-            "무좀은 곰팡이(진핵생물)라 리보솜이 인체와 같은 몇 S인가?": "80S",
-            "엽록체 내부에서 엽록소가 박혀 빛을 흡수하는 동전 모양의 구조물은?": "틸라코이드",
-            "엽록체에서 틸라코이드가 여러 개 겹쳐 쌓여있는 기둥 구조는?": "그라나",
-            "엽록체의 빈 공간으로 DNA와 리보솜이 존재하는 부위는?": "스트로마",
-            "세포골격 3가지 중 가장 굵은 것으로 압력을 버티는 기둥 역할을 하는 것은?": "미세소관",
-            "미세소관은 알파와 베타가 결합된 어떤 단백질 이합체가 모여 형성되는가?": "튜불린 이합체",
-            "방추사, 섬모, 편모를 구성하며 소낭이 이동하는 철도 역할을 하는 골격은?": "미세소관",
-            "세포골격이 한쪽은 탈중합, 한쪽은 중합되며 끊임없이 재조립되는 성질은?": "역동적 재구성",
-            "미세소관이 빠르게 자라나는 방향의 말단을 무슨 말단이라 부르는가?": "플러스 말단",
-            "방추체 미세소관의 조립 중심(MTOC) 역할을 하는 세포 소기관은?": "중심체",
-            "중심체 내부의 중심립이나 편모의 기저체는 미세소관이 3개씩 9세트 결합한 무슨 구조인가?": "9+0 삼관체",
-            "편모와 섬모 본체는 미세소관 쌍관체 9개와 가운데 미세소관 2개로 이루어진 무슨 구조인가?": "9+2 구조",
-            "편모와 섬모에서 휨(구부러짐) 운동을 유발하며 ATP를 소모하는 운동단백질은?": "디네인",
-            "디네인이 미끄러지지 않게 잡아주어 구부러짐을 가능하게 하는 교차결합 단백질은?": "넥신",
-            "미세섬유는 장력에 저항하는 밧줄 역할이다. 이 섬유를 구성하는 단백질 이름은?": "액틴",
-            "액틴 미세섬유 위를 걸어가며 근육 수축 등 활주 운동을 일으키는 운동단백질은?": "마이오신",
-            "아메바가 이동할 때 국소적 수축으로 내미는 위족, 식물의 세포질 유동은 어떤 세포골격이 관여하는가?": "미세섬유",
-            "가장 다양한 단백질(케라틴 등)로 이루어져 있으며, 핵과 같은 소기관의 위치를 고정하는 골격은?": "중간섬유",
-            "식물 세포벽에서 뼈대/철근 역할을 하는 다당류는?": "셀룰로오스",
-            "식물 세포벽에서 시멘트 역할을 하는 펙틴은 어디서 합성되어 분비되는가?": "골지체",
-            "1차 세포벽과 2차 세포벽 중 구부러지기 쉽고 가장 바깥쪽에 위치하는 것은?": "1차 세포벽",
-            "식물 세포 사이를 끈적한 펙틴으로 결합시켜주는 얇은 층 구조는?": "중간 라멜라",
-            "동물의 세포외기질(ECM)에서 탄력을 부여하는 당단백질은?": "콜라겐",
-            "ECM에서 당을 95% 함유하여 젤(Gel) 상태를 유지해주는 단백질은?": "프로테오글라이칸",
-            "세포막 수용체와 외부 콜라겐/프로테오글라이칸을 연결해주는 부착 단백질은?": "파이브로넥틴",
-            "ECM의 물리적 신호를 세포 내부 미세섬유로 전달하는 막관통 수용체 단백질은?": "인테그린",
-            "식물 세포막이 뚫려 연결되어 있어 단백질과 RNA가 직접 이동할 수 있는 통로는?": "원형질 연락사",
-            "동물 세포 사이를 제봉틀처럼 단단히 밀봉하여 수영장에서 몸이 붇지 않게 하는(방수) 연접은?": "밀착 연접",
-            "강한 물리적 힘을 받는 심장 근육 세포가 찢어지지 않게 고정해주는 똑딱이 단추 같은 연접은?": "데스모좀",
-            "심장 근육이 동시에 수축하도록 전기 신호(이온)를 빠르게 전달하는 세포 간 통로 연접은?": "간극 연접",
-            "인지질 바다에 단백질 튜브가 떠다니는 것 같다는 세포막 구조 모델은?": "유동 모자이크 모델",
-            "가을 밀이 겨울을 버티기 위해 세포막에 늘리는 지질 성분은? (포화/불포화 지방산)": "불포화 지방산",
-            "세포막이 특정 물질(친수성 분자, 이온 등)만 골라 통과시키는 성질을 무엇이라 하는가?": "선택적 투과성",
-            "혈액형(A, B, O 등)이나 자기/비자기 면역 인식 과정에서 이름표 역할을 하는 막 성분은?": "당단백질의 당 (탄수화물)",
-            "물 분자가 세포막을 빠르게 통과할 수 있도록 도와주는 전용 통로 단백질의 이름은?": "아쿠아포린",
-            "물질과 결합 시 구조가 변하며 특정 물질만 골라 수송하는 막단백질은 무슨 단백질인가?": "운반체 단백질"
-        }
-        st.session_state.bio_keys = list(st.session_state.bio_dict_data.keys())
-        random.shuffle(st.session_state.bio_keys)
+#     # 1. 데이터 정의 (세션에 저장)
+#     if 'bio_dict_data' not in st.session_state:
+#         st.session_state.bio_dict_data = {
+#             "효소와 기질의 결합처럼 가역적이고 쉽게 분리/합성되어 구조 변화에 기여하는 결합은? (강한/약한 결합)": "약한 결합",
+#             "세포골격을 따라 운동단백질이 이동할 수 있는 이유는 어떤 결합 덕분인가?": "약한 결합",
+#             "단백질이 기능을 하기 위해 접히는 구조를 형성할 때 주로 작용하는 결합은?": "약한 결합",
+#             "전기음성도가 큰 산소나 질소와 결합할 때 형성되며 물 분자 사이의 인력이기도 한 것은?": "수소 결합",
+#             "소수성 분자들이 매우 가깝게 결합할 때 전하가 순간적으로 이동하여 발생하는 인력은?": "반데르발스 인력",
+#             "털이 많아 이 인력(반데르발스)을 극대화하여 벽에 붙을 수 있는 동물의 예시는?": "도마뱀 붙이",
+#             "엔돌핀과 모르핀이 동일하게 기능할 수 있는 이유는 수용체와 무엇이 유사하기 때문인가?": "구조",
+#             "구조가 기능을 결정한다는 원리에 따라, 분자가 특정한 '이것' 구조를 가질 때만 생체분자 상호작용이 가능하다. 이것은?": "입체적",
+#             "화학평형 상태는 정반응과 역반응의 무엇이 같을 때인가?": "속도",
+#             "연소나 앙금 형성처럼 평형으로 돌아가지 못하는 반응을 무엇이라 하는가?": "비가역 반응",
+#             "화학평형 상태에서 반응물과 생성물의 비율은 어떻게 되는가?": "일정하게 유지된다",
+#             "화학평형 상태는 순변화가 없지만 반응이 멈춘 것은 아니다. 이를 무슨 상태라 하는가?": "동적 평형 상태",
+#             "식물의 물과 양분 수송에서 물분자끼리 수소결합으로 연결되어 나타나는 힘은?": "응집력",
+#             "식물 잎의 기공을 통해 수증기가 빠져나가며 물을 뺏기는 현상은?": "증산작용",
+#             "증산작용 시 물이 없어지면 세포벽 쪽으로 물이 후퇴할 때, 표면적을 최소화하려는 성질은?": "표면장력",
+#             "100m가 넘는 나무가 물기둥을 형성할 때 물분자끼리의 응집력 외에 물관 내벽에 작용하는 힘은?": "부착력",
+#             "물관 내벽은 물이 잘 붙을 수 있도록 어떤 성질을 띠고 있는가? (친수성/소수성)": "친수성",
+#             "물 1g의 온도를 1도 변화시키는데 필요한 에너지는?": "비열",
+#             "물의 비열이 큰 이유는 온도를 올리기 전에 먼저 어떤 결합을 끊어야 하기 때문인가?": "수소 결합",
+#             "비열이 큰 물은 땀을 흘려 체온을 조절할 수 있다. 이때 흡수하는 열을 무엇이라 하는가?": "기화열",
+#             "얼음이 물보다 밀도가 작아 뜨는 이유는 얼 때 어떤 구조를 띠며 팽창하기 때문인가?": "육각형 고리 구조",
+#             "물이 가장 무거워서 얼지 않고 생명체가 살 수 있게 해주는 제일 밑바닥 온도는 몇 도인가?": "4도",
+#             "이온이나 극성 분자가 물에 녹을 때, 물 분자들에 의해 둘러싸이는 현상을 무엇이라 하는가?": "수화껍질",
+#             "수화껍질 형성 시, 양이온은 물 분자의 어떤 원자 쪽으로 둘러싸이는가? (산소/수소)": "산소",
+#             "수화껍질 형성 시, 음이온은 물 분자의 어떤 원자 쪽으로 둘러싸이는가? (산소/수소)": "수소",
+#             "산소(O2)는 비극성이라 물에 잘 녹지 않는다. 이를 운반하기 위해 적혈구에 있는 단백질은?": "헤모글로빈",
+#             "셀룰로오스나 수건은 친수성이지만 물에 녹는가? (O/X)": "X",
+#             "탄소가 다양한 분자 구조를 확장시킬 수 있는 이유는 원자가 전자가 몇 개이기 때문인가?": "4개",
+#             "이산화탄소(CO2)는 탄소를 포함하지만 생물학에서 유기물로 취급하는가? (O/X)": "X",
+#             "탄화수소 사슬의 변이 4가지는 길이 변화, 이중결합 위치, 고리 존재, 그리고 무엇인가?": "가지치기",
+#             "수소가 매우 많아 연료로 사용되며 지방산의 꼬리를 구성하는 물질군은?": "탄화수소",
+#             "분자식은 같지만 구조가 달라 성질이 다른 화합물을 무엇이라 하는가?": "이성질체",
+#             "포도당과 과당은 공유결합 배열이 다른 무슨 이성질체 관계인가?": "구조 이성질체",
+#             "이중결합의 회전 제한으로 발생하며 수소가 반대 방향에 위치한 이성질체는?": "트랜스 이성질체",
+#             "눈의 시각세포에 존재하며 빛을 받아 시스/트랜스 이성질체로 변하는 분자는?": "레티날",
+#             "비대칭 탄소를 기준으로 네 개의 분자가 다를 때 거울에 비친 듯 형성되는 이성질체는?": "거울상 이성질체",
+#             "생체 내 단백질을 구성하는 아미노산은 모두 거울상 이성질체 중 어떤 형인가? (L/D)": "L형",
+#             "생체 내 포도당은 모두 거울상 이성질체 중 어떤 형인가? (L/D)": "D형",
+#             "당(알데하이드, 케톤)에 존재하며 극성을 띠는 친수성 작용기는?": "카르보닐기",
+#             "수소이온을 내놓아 산 형태로 존재하며 아미노산이 가지고 있는 작용기는?": "카르복실기",
+#             "친수성이며 양전하를 띠고 단백질(아미노산) 구성에 필수적인 질소 포함 작용기는?": "아미노기",
+#             "작용기 중 유일하게 화학반응 관여보다 소수성을 부여하는 화학기는?": "메틸기",
+#             "황화수소 작용기(SH)를 가져 친수성/소수성 양다리가 가능한 아미노산은?": "시스테인",
+#             "아데노신 3인산에서 유기인산이 떨어져 분해될 때 무기인산 형태로 바뀌면서 무엇을 방출하는가?": "물",
+#             "생체 내 에너지 화폐로 사용되며 확장된 옥텟 규칙을 갖는 인산기를 3개 가진 물질은?": "ATP",
+#             "단량체들이 공유결합으로 연결되어 중합체를 만들 때 물 분자가 빠져나가는 반응은?": "탈수 축합 반응",
+#             "중합체가 분해되어 단량체가 될 때 일어나는 소화 반응의 이름은?": "가수분해",
+#             "단량체가 모여 중합체가 되면서 이전에는 없던 새로운 특성이 나타나는 것을 무엇이라 하는가?": "창발적 특성",
+#             "미토콘드리아가 에너지를 얻기 위해 포도당의 전자를 사용하는 과정을 주로 수행하는 탄수화물의 기능은?": "연료",
+#             "단당류의 조건 3가지는 수산기 다수, ( ) 존재, CH2O 배수 분자식이다. 괄호는?": "카르보닐기",
+#             "포도당은 6탄당이라 이중막을 통과하지 못해, 초기 분해 산물인 몇 탄당(피루브산)으로 쪼개서 넣는가?": "3탄당",
+#             "카르보닐기가 분자 끝에 위치하는 당을 부르는 명칭은?": "알도오스",
+#             "카르보닐기가 분자 중간에 위치하는 당을 부르는 명칭은?": "케토오스",
+#             "세포 내에서 포도당은 주로 어떤 모양의 고리를 형성하는가?": "육각 고리",
+#             "세포 내에서 과당은 주로 어떤 모양의 고리를 형성하는가?": "오각 고리",
+#             "고리 형성 시 반응성이 큰 카르보닐기 탄소와 수산기가 만나 OH와 O를 모두 가지게 된 탄소 구조는?": "헤미 아세탈 구조",
+#             "이당류를 형성할 때 두 단당류 사이의 공유결합 이름은?": "글리코시드 결합",
+#             "포도당과 과당이 결합하여 만들어진 이당류는?": "설탕",
+#             "포도당과 포도당이 결합하여 만들어진 이당류는?": "엿당",
+#             "포도당과 갈락토오스가 결합하여 만들어진 이당류는?": "젖당",
+#             "설탕은 반응성이 약해 식물이 체관으로 운반할 때 쓴다. 이런 당을 무슨 당이라 하는가?": "비환원당",
+#             "식물의 주된 에너지 저장용 다당류는?": "전분 (또는 녹말)",
+#             "아밀로오스와 달리 1-6 글리코시드 결합으로 가지를 뻗는 식물의 녹말 성분은?": "아밀로펙틴",
+#             "아밀로펙틴보다 가지가 훨씬 많아 동물의 주된 에너지 저장 다당류로 쓰이는 것은?": "글리코젠",
+#             "동물이 식물보다 가지가 많은 글리코젠을 쓰는 이유는 한 번에 많이 끊어 무엇을 빨리 얻기 위함인가?": "에너지",
+#             "셀룰로오스를 구성하는 포도당은 1번 탄소 OH가 위에 있는 무슨 포도당인가? (알파/베타)": "베타",
+#             "알파 포도당 결합인 아밀로오스는 나선형이지만, 베타 결합이 교대로 일어나는 셀룰로오스는 무슨 구조인가?": "직선형",
+#             "세 가지 주요 지질은 지방, ( ), 스테로이드이다. 괄호는?": "인지질",
+#             "지방은 글리세롤 1분자와 지방산 몇 분자가 결합한 형태인가?": "3개",
+#             "지방산의 카르복실기와 글리세롤의 수산기 사이에서 물이 빠지며 형성되는 결합은?": "에스터 결합",
+#             "이중결합이 전혀 없어 상온에서 버터처럼 고체 상태로 존재하는 지방산은?": "포화 지방산",
+#             "이중결합이 존재하여 빽빽하게 뭉치지 못해 상온에서 액체 상태인 지방은?": "불포화 지방",
+#             "액체 식물성 기름에 수소를 첨가(수소화)하는 과정에서 생기며 동맥경화를 유발하는 부산물은?": "트랜스 지방",
+#             "지방 1g당 발생시키는 에너지는 대략 몇 kcal인가?": "9",
+#             "동물이 탄수화물 대신 지방을 에너지 저장고로 선호하는 이유는 이동 시 유리한 무슨 목적 때문인가?": "경량화",
+#             "지방과 달리 인지질은 글리세롤의 세 번째 OH에 지방산 대신 무엇이 붙는가?": "인산기",
+#             "인지질이 한 분자 안에 친수성 머리와 소수성 꼬리를 모두 갖는 성질을 무엇이라 하는가?": "양친매성",
+#             "인지질은 물 속에서 자발적으로 어떤 막 구조를 형성하는가?": "이중층",
+#             "진핵세포에서 인지질 이중층은 외부와의 분리뿐만 아니라 소기관들의 무엇 분리를 가능하게 하는가?": "내부 구획",
+#             "스테로이드 구조는 보통 육각 고리 3개와 오각 고리 몇 개로 구성되는가?": "1개",
+#             "동물 세포막에 박혀 유동성을 조절하며 각종 성호르몬의 전구체가 되는 스테로이드는?": "콜레스테롤",
+#             "생명체가 굶주릴 때 몸을 구성하는 성분이라 가장 마지막에 분해해 쓰는 거대분자는?": "단백질",
+#             "아미노산 중심 탄소에 결합하여 각 아미노산의 종류와 친수/소수 성질을 결정하는 것은?": "곁사슬",
+#             "비대칭 탄소가 없어 거울상 이성질체가 존재하지 않는 유일한 아미노산은?": "글라이신",
+#             "아미노산과 아미노산이 연결되는 공유결합의 이름은?": "펩타이드 결합",
+#             "폴리펩타이드 사슬에서 아미노기가 위치한 시작점 말단을 무엇이라 부르는가?": "N말단",
+#             "폴리펩타이드 사슬에서 카르복실기가 위치한 끝점 말단을 무엇이라 부르는가?": "C말단",
+#             "단백질의 최종 입체 구조를 결정하는 가장 근본적인 아미노산 서열은 단백질의 몇 차 구조인가?": "1차 구조",
+#             "단백질 2차 구조인 알파 나선과 베타 병풍은 골격 간의 어떤 결합으로 유지되는가?": "수소 결합",
+#             "알파 나선 구조는 몇 번째 옆에 있는 아미노산과 수소결합을 형성하는가?": "4번째",
+#             "단백질 3차 구조은 곁사슬들 간의 상호작용이다. 이중 소수성 상호작용으로 가까워졌을 때 생기는 힘은?": "반데르발스 상호작용",
+#             "헤모글로빈처럼 2개 이상의 폴리펩타이드가 모여 완성되는 단백질은 몇 차 구조인가?": "4차 구조",
+#             "헤모글로빈은 알파 폴리펩타이드 2개와 베타 폴리펩타이드 몇 개로 구성되는가?": "2개",
+#             "낫모양 적혈구 빈혈증은 몇 차 구조(아미노산 서열)의 변화가 원인인가?": "1차 구조",
+#             "낫모양 적혈구 빈혈증에서 6번 아미노산인 글루탐산이 어떤 소수성 아미노산으로 치환되는가?": "발린",
+#             "낫모양 적혈구가 혈관에서 문제를 일으키는 이유는 구조가 뒤틀려 모세혈관에 어떻게 되기 때문인가?": "걸린다",
+#             "단백질의 약한 결합이 끊어져 2차, 3차 구조가 무너지고 기능을 잃는 현상을 무엇이라 하는가?": "변성",
+#             "변성된 단백질은 비가역 반응이 아니라면 1차 구조가 멀쩡할 때 다시 복원될 수 있는가? (O/X)": "O",
+#             "인산이 있어 강력한 산성을 띠며, 유전 정보를 저장하고 전달하는 거대분자는?": "핵산",
+#             "DNA라는 책 안에 염기서열 형태로 저장된 실제 정보의 내용을 무엇이라 부르는가?": "유전자",
+#             "뉴클레오타이드를 구성하는 3가지는 5탄당, ( ), 인산기이다. 괄호는?": "질소성 염기",
+#             "뉴클레오타이드에서 염기는 5탄당의 몇 번 탄소에 결합하는가?": "1번",
+#             "뉴클레오타이드에서 인산기는 5탄당의 몇 번 탄소에 결합하는가?": "5번",
+#             "디옥시리보오스는 리보오스의 몇 번 탄소에 있는 OH가 H로 바뀐 것인가?": "2번",
+#             "뉴클레오타이드에서 인산기를 제외하고 당과 염기만 있는 부분을 무엇이라 하는가?": "뉴클레오사이드",
+#             "염기 중 두 고리를 가진 것은 퓨린, 한 고리를 가진 것은 무엇이라 하는가?": "피리미딘",
+#             "DNA에는 존재하지만 RNA에는 없는 피리미딘 염기는?": "티민 (T)",
+#             "RNA에는 존재하지만 DNA에는 없는 피리미딘 염기는?": "유라실 (U)",
+#             "뉴클레오타이드(일인산)를 다른 말로 줄여 부를 때의 약자는? (예: ATP, ADP 중)": "NMP (또는 AMP)",
+#             "핵산 중합체에서 당과 인산기 사이의 공유결합 명칭은?": "포스포다이에스터 결합",
+#             "폴리뉴클레오타이드 사슬에서 OH가 노출된 쪽은 몇 프라임 말단인가?": "3프라임",
+#             "DNA 두 가닥은 서로 평행하되 반대 방향으로 향하는데, 이 구조적 특징을 무엇이라 하는가?": "역평행",
+#             "DNA 두 가닥을 서로 마주보게 결합시켜 주는 염기 간의 결합 종류는?": "수소 결합",
+#             "항상 퓨린과 피리미딘이 짝을 지어 DNA 이중나선의 폭은 항상 몇 nm로 일정한가?": "2nm",
+#             "염기서열을 아미노산 서열로 바꾸기 위해 DNA 정보를 RNA로 복사하는 과정을 무엇이라 하는가?": "전사",
+#             "코르크 마개를 관찰해 세포벽 빈 공간을 보고 'Cell'이라 처음 명명한 학자는?": "훅",
+#             "광학현미경은 배율과 대비, 그리고 두 점을 구분하는 선명도인 ( )이 중요하다. 괄호는?": "해상력",
+#             "표면에 금속을 씌우고 전자를 쏘아 물체의 입체 구조(흑백)를 관찰하는 전자현미경은?": "주사 전자 현미경 (SEM)",
+#             "세포를 동결건조시켜 전자를 통과시켜 내부 단면을 관찰하는 전자현미경은?": "투과 전자 현미경 (TEM)",
+#             "세포를 부수고 원심분리기를 돌려 크기와 밀도에 따라 소기관을 분리하는 방법은?": "세포 분획법",
+#             "세포 분획법 시 가장 먼저(가장 무거워서) 가라앉는 세포 소기관은?": "핵",
+#             "진핵세포와 원핵세포의 공통 구조 4가지는 세포막, 세포질, 염색체, 그리고 단백질 합성 기구인 ( )이다.": "리보솜",
+#             "원핵세포는 막성 소기관과 진정한 핵이 없다. 대신 DNA가 뭉쳐있는 곳을 무엇이라 부르는가?": "핵양체",
+#             "세포 크기가 커지면 부피에 비해 표면적 비율이 감소해 대사가 비효율적이다. 그래서 생장할 때 부피를 키우지 않고 무엇을 늘리는가?": "세포 수",
+#             "진핵세포가 소기관을 막으로 구획화하여 얻는 장점은 여러 대사 동시 진행과 물질 탐색 시의 무엇인가?": "경제성 (효율성)",
+#             "핵막은 외막과 내막으로 이루어진 이중막이다. 물질 출입을 통제하는 구멍을 구성하는 단백질 복합체는?": "핵공 복합체",
+#             "DNA와 히스톤 단백질의 복합체를 일컫는 말은?": "염색체",
+#             "핵 내부에 있으며 rRNA 유전자와 단백질이 모여 리보솜 소단위체들을 조립하는 곳은?": "인",
+#             "막이 없는 비막성 소기관이며, rRNA와 단백질로 구성되어 단백질을 합성하는 곳은?": "리보솜",
+#             "리보솜은 평소에 대/소 단위체가 떨어져 있다가, 무엇이 올 때만 합쳐져 번역을 시작하는가?": "mRNA",
+#             "모든 단백질 합성은 부착 리보솜이 아닌 어느 리보솜에서 먼저 시작되는가?": "자유 리보솜",
+#             "인지질과 스테로이드 합성, 해독작용, 칼슘 저장을 담당하는 막성 소기관은?": "활면 소포체",
+#             "조면 소포체는 표면에 무엇이 붙어있어 거칠게 보이는가?": "리보솜",
+#             "조면 소포체에서 아스파라긴(N)에 올리고당을 붙여 단백질이 올바르게 접히도록 돕는 과정은?": "N-당화 (N글리코실화)",
+#             "조면 소포체는 합성된 단백질을 골지체로 보내기 위해 막을 떼어내어 무엇을 만드는가?": "수송 소낭",
+#             "골지체는 단백질을 가공, 분류, 수송한다. 세린이나 트레오닌의 O에 당을 붙이는 수정 과정을 무엇이라 하는가?": "O-당화",
+#             "골지체가 분비될 물질 중 리소좀으로 보낼 물질을 분류하기 위해 만노오스 6번 탄소에 붙이는 표지는?": "인산기",
+#             "골지체와 소포체의 납작한 주머니 구조를 부르는 명칭은?": "시스터나",
+#             "소낭을 받아들이는 골지체의 안쪽 면을 무슨 면이라 부르는가?": "시스면",
+#             "가공된 물질을 담은 소낭이 떨어져 나가는 골지체의 바깥쪽 면을 무슨 면이라 부르는가?": "트랜스면",
+#             "시스면이 점차 밀려 중간층이 되고 최종적으로 트랜스면이 된다는 골지체 역동성 모델은?": "시스터나 성숙 모델",
+#             "리소좀 내부에는 고분자를 분해하는 어떤 효소가 가득 차 있는가?": "가수분해 효소",
+#             "리소좀 내부는 강한 산성이다. pH는 대략 얼마인가?": "pH 5",
+#             "아메바나 백혈구가 외부 물질을 둘러싸 식포를 형성한 뒤 리소좀과 융합하여 소화하는 과정은?": "식세포 작용",
+#             "고장난 미토콘드리아 등 제 기능을 못하는 자기 소기관을 리소좀과 결합시켜 분해하는 과정은?": "자가소화 작용",
+#             "리소좀의 지질분해효소 결핍으로 잔류소체가 뇌에 쌓여 심각한 문제를 일으키는 유전병은?": "테이 삭스병",
+#             "짚신벌레가 민물에서 물이 계속 들어와 터지는 것을 막기 위해 물을 퍼내는 액포는?": "수축포",
+#             "식물 세포의 생장(부피 팽창)에 핵심적인 역할을 하는 커다란 소기관은?": "중간 액포 (중심 액포)",
+#             "미토콘드리아와 엽록체가 원래 독립된 세균이었다가 진핵세포 안으로 들어와 공생하게 되었다는 이론은?": "세포내 공생설",
+#             "미토콘드리아가 세균에서 유래했음을 보여주는 강력한 증거로, 독자적으로 가지고 있는 원형 물질 두 가지는 DNA와 무엇인가?": "리보솜",
+#             "간세포 등 에너지를 많이 쓰는 세포에 특히 많으며, 당 화학에너지를 ATP로 변환하는 소기관은?": "미토콘드리아",
+#             "미토콘드리아 내막이 쭈글쭈글하게 접혀 표면적을 넓힌 구조의 이름은?": "크리스타",
+#             "미토콘드리아의 가장 안쪽 공간으로 독자적인 DNA와 리보솜이 존재하는 곳은?": "기질",
+#             "무좀은 곰팡이(진핵생물)라 리보솜이 인체와 같은 몇 S인가?": "80S",
+#             "엽록체 내부에서 엽록소가 박혀 빛을 흡수하는 동전 모양의 구조물은?": "틸라코이드",
+#             "엽록체에서 틸라코이드가 여러 개 겹쳐 쌓여있는 기둥 구조는?": "그라나",
+#             "엽록체의 빈 공간으로 DNA와 리보솜이 존재하는 부위는?": "스트로마",
+#             "세포골격 3가지 중 가장 굵은 것으로 압력을 버티는 기둥 역할을 하는 것은?": "미세소관",
+#             "미세소관은 알파와 베타가 결합된 어떤 단백질 이합체가 모여 형성되는가?": "튜불린 이합체",
+#             "방추사, 섬모, 편모를 구성하며 소낭이 이동하는 철도 역할을 하는 골격은?": "미세소관",
+#             "세포골격이 한쪽은 탈중합, 한쪽은 중합되며 끊임없이 재조립되는 성질은?": "역동적 재구성",
+#             "미세소관이 빠르게 자라나는 방향의 말단을 무슨 말단이라 부르는가?": "플러스 말단",
+#             "방추체 미세소관의 조립 중심(MTOC) 역할을 하는 세포 소기관은?": "중심체",
+#             "중심체 내부의 중심립이나 편모의 기저체는 미세소관이 3개씩 9세트 결합한 무슨 구조인가?": "9+0 삼관체",
+#             "편모와 섬모 본체는 미세소관 쌍관체 9개와 가운데 미세소관 2개로 이루어진 무슨 구조인가?": "9+2 구조",
+#             "편모와 섬모에서 휨(구부러짐) 운동을 유발하며 ATP를 소모하는 운동단백질은?": "디네인",
+#             "디네인이 미끄러지지 않게 잡아주어 구부러짐을 가능하게 하는 교차결합 단백질은?": "넥신",
+#             "미세섬유는 장력에 저항하는 밧줄 역할이다. 이 섬유를 구성하는 단백질 이름은?": "액틴",
+#             "액틴 미세섬유 위를 걸어가며 근육 수축 등 활주 운동을 일으키는 운동단백질은?": "마이오신",
+#             "아메바가 이동할 때 국소적 수축으로 내미는 위족, 식물의 세포질 유동은 어떤 세포골격이 관여하는가?": "미세섬유",
+#             "가장 다양한 단백질(케라틴 등)로 이루어져 있으며, 핵과 같은 소기관의 위치를 고정하는 골격은?": "중간섬유",
+#             "식물 세포벽에서 뼈대/철근 역할을 하는 다당류는?": "셀룰로오스",
+#             "식물 세포벽에서 시멘트 역할을 하는 펙틴은 어디서 합성되어 분비되는가?": "골지체",
+#             "1차 세포벽과 2차 세포벽 중 구부러지기 쉽고 가장 바깥쪽에 위치하는 것은?": "1차 세포벽",
+#             "식물 세포 사이를 끈적한 펙틴으로 결합시켜주는 얇은 층 구조는?": "중간 라멜라",
+#             "동물의 세포외기질(ECM)에서 탄력을 부여하는 당단백질은?": "콜라겐",
+#             "ECM에서 당을 95% 함유하여 젤(Gel) 상태를 유지해주는 단백질은?": "프로테오글라이칸",
+#             "세포막 수용체와 외부 콜라겐/프로테오글라이칸을 연결해주는 부착 단백질은?": "파이브로넥틴",
+#             "ECM의 물리적 신호를 세포 내부 미세섬유로 전달하는 막관통 수용체 단백질은?": "인테그린",
+#             "식물 세포막이 뚫려 연결되어 있어 단백질과 RNA가 직접 이동할 수 있는 통로는?": "원형질 연락사",
+#             "동물 세포 사이를 제봉틀처럼 단단히 밀봉하여 수영장에서 몸이 붇지 않게 하는(방수) 연접은?": "밀착 연접",
+#             "강한 물리적 힘을 받는 심장 근육 세포가 찢어지지 않게 고정해주는 똑딱이 단추 같은 연접은?": "데스모좀",
+#             "심장 근육이 동시에 수축하도록 전기 신호(이온)를 빠르게 전달하는 세포 간 통로 연접은?": "간극 연접",
+#             "인지질 바다에 단백질 튜브가 떠다니는 것 같다는 세포막 구조 모델은?": "유동 모자이크 모델",
+#             "가을 밀이 겨울을 버티기 위해 세포막에 늘리는 지질 성분은? (포화/불포화 지방산)": "불포화 지방산",
+#             "세포막이 특정 물질(친수성 분자, 이온 등)만 골라 통과시키는 성질을 무엇이라 하는가?": "선택적 투과성",
+#             "혈액형(A, B, O 등)이나 자기/비자기 면역 인식 과정에서 이름표 역할을 하는 막 성분은?": "당단백질의 당 (탄수화물)",
+#             "물 분자가 세포막을 빠르게 통과할 수 있도록 도와주는 전용 통로 단백질의 이름은?": "아쿠아포린",
+#             "물질과 결합 시 구조가 변하며 특정 물질만 골라 수송하는 막단백질은 무슨 단백질인가?": "운반체 단백질"
+#         }
+#         st.session_state.bio_keys = list(st.session_state.bio_dict_data.keys())
+#         random.shuffle(st.session_state.bio_keys)
 
-    # 2. 인덱스 및 상태 초기화
-    if 'bio_idx' not in st.session_state:
-        st.session_state.bio_idx = 0
+#     # 2. 인덱스 및 상태 초기화
+#     if 'bio_idx' not in st.session_state:
+#         st.session_state.bio_idx = 0
 
-    idx = st.session_state.bio_idx
-    q_keys = st.session_state.bio_keys
-    current_q = q_keys[idx]
-    correct_a = st.session_state.bio_dict_data[current_q]
+#     idx = st.session_state.bio_idx
+#     q_keys = st.session_state.bio_keys
+#     current_q = q_keys[idx]
+#     correct_a = st.session_state.bio_dict_data[current_q]
 
-    # --- [채점 함수 정의] ---
-    def check_bio_ans():
-        user_val = st.session_state[f"bio_input_{idx}"].strip().replace(" ", "").lower()
-        clean_correct = correct_a.strip().replace(" ", "").lower()
+#     # --- [채점 함수 정의] ---
+#     def check_bio_ans():
+#         user_val = st.session_state[f"bio_input_{idx}"].strip().replace(" ", "").lower()
+#         clean_correct = correct_a.strip().replace(" ", "").lower()
         
-        if user_val == clean_correct:
-            st.session_state.bio_feedback = ("success", f"✅ 정답입니다! (정답: {correct_a})")
-        else:
-            st.session_state.bio_feedback = ("error", f"❌ 오답입니다. 정답은 [{correct_a}] 입니다.")
-            # 오답 노트 기록
-            new_wrong = {"category": "🧬 생물 퀴즈", "question": current_q, "answer": correct_a}
-            if 'wrong_answers' not in st.session_state:
-                st.session_state.wrong_answers = []
-            if new_wrong not in st.session_state.wrong_answers:
-                st.session_state.wrong_answers.append(new_wrong)
+#         if user_val == clean_correct:
+#             st.session_state.bio_feedback = ("success", f"✅ 정답입니다! (정답: {correct_a})")
+#         else:
+#             st.session_state.bio_feedback = ("error", f"❌ 오답입니다. 정답은 [{correct_a}] 입니다.")
+#             # 오답 노트 기록
+#             new_wrong = {"category": "🧬 생물 퀴즈", "question": current_q, "answer": correct_a}
+#             if 'wrong_answers' not in st.session_state:
+#                 st.session_state.wrong_answers = []
+#             if new_wrong not in st.session_state.wrong_answers:
+#                 st.session_state.wrong_answers.append(new_wrong)
 
-    # 3. UI 구성
-    st.write(f"📊 진행 상황: {idx + 1} / {len(q_keys)}")
-    st.progress((idx + 1) / len(q_keys))
+#     # 3. UI 구성
+#     st.write(f"📊 진행 상황: {idx + 1} / {len(q_keys)}")
+#     st.progress((idx + 1) / len(q_keys))
 
-    st.info(f"질문: {current_q}")
+#     st.info(f"질문: {current_q}")
     
-    # 텍스트 입력 (엔터키 자동 채점 적용)
-    st.text_input(
-        "정답 입력 (엔터 가능):", 
-        key=f"bio_input_{idx}",
-        on_change=check_bio_ans
-    )
+#     # 텍스트 입력 (엔터키 자동 채점 적용)
+#     st.text_input(
+#         "정답 입력 (엔터 가능):", 
+#         key=f"bio_input_{idx}",
+#         on_change=check_bio_ans
+#     )
 
-    # 채점 결과 표시
-    if 'bio_feedback' in st.session_state:
-        status, msg = st.session_state.bio_feedback
-        if status == "success":
-            st.success(msg)
-        else:
-            st.error(msg)
+#     # 채점 결과 표시
+#     if 'bio_feedback' in st.session_state:
+#         status, msg = st.session_state.bio_feedback
+#         if status == "success":
+#             st.success(msg)
+#         else:
+#             st.error(msg)
 
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("정답 확인"):
-            check_bio_ans()
-            st.rerun()
+#     col1, col2 = st.columns(2)
+#     with col1:
+#         if st.button("정답 확인"):
+#             check_bio_ans()
+#             st.rerun()
 
-    with col2:
-        if st.button("다음 문제"):
-            if st.session_state.bio_idx < len(st.session_state.bio_keys) - 1:
-                st.session_state.bio_idx += 1
-                # 피드백 초기화
-                if 'bio_feedback' in st.session_state:
-                    del st.session_state.bio_feedback
-                st.rerun()
-            else:
-                st.balloons()
-                st.success("모든 문항을 완료했습니다! 다시 섞어 시작합니다.")
-                random.shuffle(st.session_state.bio_keys)
-                st.session_state.bio_idx = 0
-                if 'bio_feedback' in st.session_state:
-                    del st.session_state.bio_feedback
-                st.rerun()
+#     with col2:
+#         if st.button("다음 문제"):
+#             if st.session_state.bio_idx < len(st.session_state.bio_keys) - 1:
+#                 st.session_state.bio_idx += 1
+#                 # 피드백 초기화
+#                 if 'bio_feedback' in st.session_state:
+#                     del st.session_state.bio_feedback
+#                 st.rerun()
+#             else:
+#                 st.balloons()
+#                 st.success("모든 문항을 완료했습니다! 다시 섞어 시작합니다.")
+#                 random.shuffle(st.session_state.bio_keys)
+#                 st.session_state.bio_idx = 0
+#                 if 'bio_feedback' in st.session_state:
+#                     del st.session_state.bio_feedback
+#                 st.rerun()
 
 elif menu == "❌ 오답 노트":
     st.header("❌ 나만의 오답 노트")
